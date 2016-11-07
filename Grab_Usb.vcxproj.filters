@@ -15,7 +15,7 @@
     <ClInclude Include="ImageSaver.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="ConfiguDump.h">
+    <ClInclude Include="ConfigDump.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

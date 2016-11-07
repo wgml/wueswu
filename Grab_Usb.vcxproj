@@ -176,7 +176,7 @@
     <ClCompile Include="Grab.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ConfiguDump.h" />
+    <ClInclude Include="ConfigDump.h" />
     <ClInclude Include="ImageSaver.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
