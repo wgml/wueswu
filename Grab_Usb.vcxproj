@@ -177,7 +177,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConfigDump.h" />
-    <ClInclude Include="ImageSaver.h" />
+    <ClInclude Include="ContextSaver.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

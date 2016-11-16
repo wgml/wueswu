@@ -12,10 +12,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ImageSaver.h">
+    <ClInclude Include="ConfigDump.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="ConfigDump.h">
+    <ClInclude Include="ContextSaver.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,0 +1,69 @@
+﻿#pragma once
+#include <pylon/PylonIncludes.h>
+#include <chrono>
+#include <fstream>
+class ContextSaver
+{
+public:
+	ContextSaver()
+		: file(std::fstream())
+	{
+		file.open(file_name(), std::fstream::out);
+	}
+
+	~ContextSaver()
+	{
+		file.close();
+	}
+
+
+	void save_context(Pylon::CGrabResultPtr ptrGrabResult) {
+		auto width = ptrGrabResult->GetWidth();
+		auto height = ptrGrabResult->GetHeight();
+
+		std::cout << width << "x" << height << std::endl;
+
+		const uint8_t* pImageBuffer = static_cast<uint8_t *>(ptrGrabResult->GetBuffer());
+
+		long sum = 0;
+		long cnt = 0;
+		for (size_t row = 0; row < width; row++)
+		{
+			for (size_t col = (row + 1) % 2; col < height; col += 2)
+			{
+				cnt++;
+				sum += pImageBuffer[row * height + col];
+			}
+		}
+
+		std::cout << "sum: " << sum << " cnt: " << cnt << " result: " << sum / cnt << std::endl;
+		file << current_micros().count() << " " << sum << " " << cnt << std::endl;
+	}
+
+private:
+	std::fstream file;
+
+	static const char* get_prefix()
+	{
+		auto init_time = std::chrono::duration_cast<std::chrono::seconds>(
+			std::chrono::system_clock::now().time_since_epoch());
+		std::ostringstream stream;
+		stream << init_time.count() << "-";
+		return stream.str().c_str();
+	}
+
+	Pylon::String_t file_name() const
+	{
+		char buffer[100];
+		std::snprintf(buffer, sizeof(buffer), "%s.txt", get_prefix());
+		return buffer;
+	}
+
+	std::chrono::microseconds current_micros() const
+	{
+		return std::chrono::duration_cast<std::chrono::microseconds>(
+			std::chrono::system_clock::now().time_since_epoch());
+	}
+
+
+};
