@@ -1,8 +1,12 @@
 #include <pylon/PylonIncludes.h>
-#undef PYLON_WIN_BUILD
+#include <chrono>
+#include <thread>
+
+#define PYLON_WIN_BUILD
+//#undef PYLON_WIN_BUILD
 
 #ifdef PYLON_WIN_BUILD
-#    include <pylon/PylonGUI.h>
+#include <pylon/PylonGUI.h>
 #endif
 
 #include <pylon/usb/BaslerUsbInstantCamera.h>
@@ -17,9 +21,14 @@ using GenApi_3_0_Basler_pylon_v5_0::IsAvailable;
 
 static size_t imageCount = 0;
 
-void grabFailed(Pylon::CGrabResultPtr ptrGrabResult)
+void sleep_for(long seconds)
 {
-	std::cout << "Error: " << ptrGrabResult->GetErrorCode() << " " << ptrGrabResult->GetErrorDescription() << std::endl;
+	std::this_thread::sleep_for(std::chrono::seconds(seconds));
+}
+
+void grabFailed(Pylon::CGrabResultPtr ptrGrabResult, int img_idx)
+{
+	std::cout << "#" << img_idx << " " << "Error: " << ptrGrabResult->GetErrorCode() << " " << ptrGrabResult->GetErrorDescription() << std::endl;
 }
 
 void waitExit()
@@ -65,33 +74,46 @@ int main(int argc, char* argv[])
 		Camera_t camera(Pylon::CTlFactory::GetInstance().CreateFirstDevice());
 		
 		camera.Open();
+
+		int images_to_grab = 10000;
 		
-		camera.Width = 320;
-		camera.Height = 240;
+		int maxWidth = 2040;
+		int maxHeight = 1086;
+		int desiredWidth = 800;
+		int desiredHeight = 600;
+		int offsetX = (((maxWidth - desiredWidth) / 2) / 2) * 2;
+		int offsetY = (((maxHeight - desiredHeight) / 2) / 2) * 2;
+		std::cerr << desiredWidth << "x" << desiredHeight << "+" << offsetX << "+" << offsetY << std::endl;
 		
+		camera.Width = desiredWidth;
+		camera.Height = desiredHeight;
+		camera.OffsetX = offsetX;
+		camera.OffsetY = offsetY;
+		camera.ExposureTime = 10000;
 		setPixelFormat(camera);
 		ConfigDump::dump(camera);
 
-		const size_t imagesToGrab = 1000;
 		camera.MaxNumBuffer = 100;
-		camera.StartGrabbing(imagesToGrab);
+		camera.StartGrabbing(images_to_grab);
 
 		Pylon::CGrabResultPtr ptrGrabResult;
 
-		while (camera.IsGrabbing())
+//		sleep_for(20);
+
+		for (int cur_img_idx = 0; cur_img_idx < images_to_grab && camera.IsGrabbing(); cur_img_idx++)
 		{
 			camera.RetrieveResult(5000, ptrGrabResult, Pylon::TimeoutHandling_ThrowException);
 
 			if (ptrGrabResult->GrabSucceeded())
 			{
-				contextSaver.save_context(ptrGrabResult);
+				contextSaver.save_context(ptrGrabResult, cur_img_idx);
 #ifdef PYLON_WIN_BUILD
 				Pylon::DisplayImage(1, ptrGrabResult);
 #endif
 			}
 			else
 			{
-				grabFailed(ptrGrabResult);
+				grabFailed(ptrGrabResult, cur_img_idx);
 			}
 		}
 	}

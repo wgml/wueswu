@@ -17,11 +17,11 @@ public:
 	}
 
 
-	void save_context(Pylon::CGrabResultPtr ptrGrabResult) {
+	void save_context(Pylon::CGrabResultPtr ptrGrabResult, int img_idx) {
 		auto width = ptrGrabResult->GetWidth();
 		auto height = ptrGrabResult->GetHeight();
 
-		std::cout << width << "x" << height << std::endl;
+		std::cout << "#" << img_idx << " " << width << "x" << height << std::endl;
 
 		const uint8_t* pImageBuffer = static_cast<uint8_t *>(ptrGrabResult->GetBuffer());
 
@@ -36,27 +36,20 @@ public:
 			}
 		}
 
-		std::cout << "sum: " << sum << " cnt: " << cnt << " result: " << sum / cnt << std::endl;
+		std::cout << "#" << img_idx << " " << "sum: " << sum << " cnt: " << cnt << " result: " << sum / cnt << std::endl;
 		file << current_micros().count() << " " << sum << " " << cnt << std::endl;
 	}
 
 private:
 	std::fstream file;
 
-	static const char* get_prefix()
+	Pylon::String_t file_name() const
 	{
 		auto init_time = std::chrono::duration_cast<std::chrono::seconds>(
 			std::chrono::system_clock::now().time_since_epoch());
 		std::ostringstream stream;
-		stream << init_time.count() << "-";
+		stream << init_time.count() << ".txt";
 		return stream.str().c_str();
-	}
-
-	Pylon::String_t file_name() const
-	{
-		char buffer[100];
-		std::snprintf(buffer, sizeof(buffer), "%s.txt", get_prefix());
-		return buffer;
 	}
 
 	std::chrono::microseconds current_micros() const

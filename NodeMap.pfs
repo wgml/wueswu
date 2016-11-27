@@ -4,10 +4,10 @@
 ExposureAuto	Off
 BalanceWhiteAuto	Off
 GainAuto	Off
-Width	320
-Height	240
-OffsetX	0
-OffsetY	0
+Width	800
+Height	600
+OffsetX	620
+OffsetY	242
 CenterX	0
 CenterY	0
 DecimationVertical	1
@@ -74,7 +74,7 @@ TriggerActivation	RisingEdge
 TriggerSelector	FrameStart
 TriggerDelay	0
 AcquisitionFrameRateEnable	0
-AcquisitionFrameRate	100.00000
+AcquisitionFrameRate	30.00030
 DeviceLinkSelector	0
 DeviceLinkThroughputLimitMode	On
 DeviceLinkSelector	0
