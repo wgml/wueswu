@@ -2,7 +2,6 @@
 #include <iostream>
 #include <thread>
 #include <fstream>
-
 #include "MockContextProvider.h"
 
 void MockContextProvider::run() {
@@ -19,12 +18,9 @@ void MockContextProvider::run() {
 }
 
 void MockContextProvider::loadFromFile(std::string filename) {
-  std::ifstream infile{filename};
-
-  unsigned long micros, sum, count;
-
-  unsigned long prev_micros = 0;
-  unsigned long sum_diffs = 0;
+  std::ifstream infile(filename);
+  unsigned long sum, count;
+  unsigned long long micros, prev_micros = 0, sum_diffs = 0;
   while (infile >> micros >> sum >> count) {
     buffer.push_back(AcquisitionContext{std::chrono::microseconds{0}, sum, count});
     if (prev_micros == 0) {
@@ -34,7 +30,7 @@ void MockContextProvider::loadFromFile(std::string filename) {
       prev_micros = micros;
     }
   }
-  us_delay = sum_diffs / (buffer.size() - 1);
+  us_delay = static_cast<unsigned long>(sum_diffs / (buffer.size() - 1));
   std::cerr << "Camera will be mocked with " << buffer.size() << " samples and with " << us_delay
             << "us delay between samples."
             << " It " << (runInfinitely ? "will" : "won't") << " run indefinitely." << std::endl;

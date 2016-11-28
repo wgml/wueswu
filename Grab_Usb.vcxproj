@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectName>Grab</ProjectName>
+    <ProjectName>proj</ProjectName>
     <ProjectGuid>{9CE2A9A4-2EFB-4EF7-B54D-6B44317D4B59}</ProjectGuid>
     <RootNamespace>Grab</RootNamespace>
   </PropertyGroup>
@@ -173,11 +173,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Grab.cpp" />
+    <ClCompile Include="CameraContextProvider.cc" />
+    <ClCompile Include="HeartRateEstimator.cc" />
+    <ClCompile Include="MockContextProvider.cc" />
+    <ClCompile Include="Work.cc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AcquisitionContext.h" />
+    <ClInclude Include="CameraContextProvider.h" />
     <ClInclude Include="ConfigDump.h" />
     <ClInclude Include="ContextSaver.h" />
+    <ClInclude Include="HeartRateEstimator.h" />
+    <ClInclude Include="MockContextProvider.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

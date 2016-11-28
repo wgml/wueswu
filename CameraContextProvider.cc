@@ -6,7 +6,7 @@ void CameraContextProvider::run() {
 
   Pylon::CGrabResultPtr ptrGrabResult;
 
-  for (int idx = 0; idx < imagesToGrab && camera.IsGrabbing(); idx++) {
+  for (unsigned int idx = 0; idx < imagesToGrab && camera.IsGrabbing(); idx++) {
     camera.RetrieveResult(10000, ptrGrabResult, Pylon::TimeoutHandling_Return);
 
     if (ptrGrabResult->GrabSucceeded()) {
@@ -51,7 +51,7 @@ void CameraContextProvider::setPixelFormat() {
   }
 }
 
-void CameraContextProvider::grabSucceeded(Pylon::CGrabResultPtr resultPtr, int idx) {
+void CameraContextProvider::grabSucceeded(Pylon::CGrabResultPtr resultPtr, unsigned int idx) {
   auto width = resultPtr->GetWidth();
   auto height = resultPtr->GetHeight();
 
@@ -79,7 +79,7 @@ void CameraContextProvider::grabSucceeded(Pylon::CGrabResultPtr resultPtr, int i
   contextSaver.save_context(now, sum, cnt);
 }
 
-void CameraContextProvider::grabFailed(Pylon::CGrabResultPtr resultPtr, int idx) {
+void CameraContextProvider::grabFailed(Pylon::CGrabResultPtr resultPtr, unsigned int idx) {
   std::cerr << "#" << idx << " " << "Error: " << resultPtr->GetErrorCode() << " "
             << resultPtr->GetErrorDescription() << std::endl;
 

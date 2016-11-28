@@ -13,8 +13,10 @@ public:
   }
   virtual void run() = 0;
 
+  virtual ~ContextProvider() = default;
+
 protected:
-  HeartRateEstimator *estimator;
+  HeartRateEstimator *estimator = nullptr;
 };
 
 class HeartRateEstimator {

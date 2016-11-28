@@ -7,7 +7,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Grab.cpp">
+    <ClCompile Include="MockContextProvider.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Work.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HeartRateEstimator.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraContextProvider.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -16,6 +25,18 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="ContextSaver.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AcquisitionContext.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraContextProvider.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MockContextProvider.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HeartRateEstimator.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

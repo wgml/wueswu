@@ -35,9 +35,9 @@ private:
 
   void setPixelFormat();
 
-  void grabSucceeded(Pylon::CGrabResultPtr resultPtr, int idx);
+  void grabSucceeded(Pylon::CGrabResultPtr resultPtr, unsigned int idx);
 
-  void grabFailed(Pylon::CGrabResultPtr resultPtr, int idx);
+  void grabFailed(Pylon::CGrabResultPtr resultPtr, unsigned int idx);
 };
 
 #endif //WUESWU_CAMERACONTEXTPROVIDER_H
