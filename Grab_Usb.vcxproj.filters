@@ -19,6 +19,9 @@
     <ClCompile Include="CameraContextProvider.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="kissfft\kiss_fft.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConfigDump.h">
@@ -37,6 +40,15 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="HeartRateEstimator.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="kissfft\_kiss_fft_guts.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="kissfft\kiss_fft.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="kissfft\kissfft.hh">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

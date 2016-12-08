@@ -3,6 +3,7 @@
 #define WUESWU_HEARTRATEESTIMATOR_H
 
 #include <deque>
+#include <mutex>
 #include "AcquisitionContext.h"
 
 class HeartRateEstimator;
@@ -35,13 +36,24 @@ public:
   }
 
   void notify(AcquisitionContext context) {
+    std::lock_guard<std::mutex> lock(data_mutex);
+    while (data.size() >= WINDOW_SIZE)
+      data.pop_front();
     data.push_back(context);
   }
 
 private:
   double estimate();
+  void get_raw_data(double *);
+  void filter_data(double*, double*);
+  void fft_data(double*, double*, double*, const double);
+  double determine_result(double*, double*);
+
+  const size_t WINDOW_SIZE = 2048;
   volatile bool work = false;
+
   std::deque<AcquisitionContext> data;
+  std::mutex data_mutex;
   ContextProvider &provider;
 };
 

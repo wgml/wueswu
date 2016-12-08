@@ -7,7 +7,7 @@
 
 // i suggest passing argument to main, e.g. C:/Users/vka/Documents/wueswu/Grab/data/ania_biale_6_exp=30000.txt
 int main(int argc, char *argv[]) {
-  bool mock = argc > 1;
+  bool mock = true;
   std::shared_ptr<ContextProvider> provider;
   if (mock) {
     provider = std::make_shared<MockContextProvider>(
