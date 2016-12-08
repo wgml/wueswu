@@ -2,10 +2,8 @@
 #include "HeartRateEstimator.h"
 #include <cassert>
 #include <thread>
-//#define _USE_MATH_DEFINES
-//#include <math.h>
 #include "kissfft/kiss_fft.h"
-//#include "kissfft/tools/kiss_fftr.h"
+#include "kissfft/tools/kiss_fftr.h"
 
 void HeartRateEstimator::init() {
   provider.subscribe(this);
@@ -66,21 +64,19 @@ void HeartRateEstimator::fft_data(double *raw_data, double *fft_data_abs, double
   size_t nfft;
   for (nfft = 1; nfft < WINDOW_SIZE; nfft *= 2);
 
-  kiss_fft_cpx *signal = new kiss_fft_cpx[nfft];
+  kiss_fft_scalar *signal = new kiss_fft_scalar[nfft];
   kiss_fft_cpx *fft = new kiss_fft_cpx[nfft];
   for (size_t i = 0; i < WINDOW_SIZE; i++)
   {
-    signal[i].r = static_cast<float>(raw_data[i]);
-    signal[i].i = 0;
+    signal[i] = static_cast<float>(raw_data[i]);
   }
   for (size_t i = WINDOW_SIZE; i < nfft; i++)
   {
-    signal[i].r = signal[i].i = 0;
+    signal[i] = 0;
   }
 
-  kiss_fft_cfg cfg = kiss_fft_alloc(nfft, 0, nullptr, nullptr);
-
-  kiss_fft(cfg, signal, fft);
+  kiss_fftr_cfg cfg = kiss_fftr_alloc(nfft, 0, nullptr, nullptr);
+  kiss_fftr(cfg, signal, fft);
 
   const size_t L = WINDOW_SIZE;
   for (size_t i = 0; i < WINDOW_SIZE; i++)

@@ -2,7 +2,7 @@
 #include "CameraContextProvider.h"
 
 void CameraContextProvider::run() {
-  camera.StartGrabbing(imagesToGrab);
+  camera.StartGrabbing(imagesToGrab); //@@@@@@@@
 
   Pylon::CGrabResultPtr ptrGrabResult;
 

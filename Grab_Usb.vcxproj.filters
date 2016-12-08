@@ -22,6 +22,9 @@
     <ClCompile Include="kissfft\kiss_fft.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="kissfft\tools\kiss_fftr.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConfigDump.h">
@@ -49,6 +52,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="kissfft\kissfft.hh">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="kissfft\tools\kiss_fftr.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

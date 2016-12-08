@@ -176,6 +176,7 @@
     <ClCompile Include="CameraContextProvider.cc" />
     <ClCompile Include="HeartRateEstimator.cc" />
     <ClCompile Include="kissfft\kiss_fft.c" />
+    <ClCompile Include="kissfft\tools\kiss_fftr.c" />
     <ClCompile Include="MockContextProvider.cc" />
     <ClCompile Include="Work.cc" />
   </ItemGroup>
@@ -187,6 +188,7 @@
     <ClInclude Include="HeartRateEstimator.h" />
     <ClInclude Include="kissfft\kissfft.hh" />
     <ClInclude Include="kissfft\kiss_fft.h" />
+    <ClInclude Include="kissfft\tools\kiss_fftr.h" />
     <ClInclude Include="kissfft\_kiss_fft_guts.h" />
     <ClInclude Include="MockContextProvider.h" />
   </ItemGroup>

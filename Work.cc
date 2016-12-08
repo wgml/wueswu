@@ -25,16 +25,16 @@ int main(int argc, char *argv[]) {
       std::cerr << "Basler camera is not accessible." << std::endl;
       return 1;
     }
+
     Pylon::CBaslerUsbInstantCamera camera(pDevice);
     provider = std::make_shared<CameraContextProvider>(camera, 10000,
                                                        800, 600, 30000);
   }
-
   HeartRateEstimator estimator{*provider};
   estimator.init();
-
-  std::thread estimatorThread([&estimator] {estimator.run();});
   std::thread providerThread([&] { provider->run(); });
+  std::thread estimatorThread([&estimator] {estimator.run();});
+
   providerThread.join();
   estimatorThread.join();
   if (!mock)

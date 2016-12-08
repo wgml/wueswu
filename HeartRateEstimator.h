@@ -49,7 +49,7 @@ private:
   void fft_data(double*, double*, double*, const double);
   double determine_result(double*, double*);
 
-  const size_t WINDOW_SIZE = 2048;
+  const size_t WINDOW_SIZE = 512;
   volatile bool work = false;
 
   std::deque<AcquisitionContext> data;
