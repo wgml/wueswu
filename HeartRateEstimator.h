@@ -5,6 +5,7 @@
 #include <deque>
 #include <mutex>
 #include "AcquisitionContext.h"
+#include <memory>
 
 #define _USE_MATH_DEFINES
 #include <cassert>

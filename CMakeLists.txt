@@ -4,7 +4,8 @@ set(PYLON_ROOT ~/Programming/C/libs/pylon5)
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
 set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -std=c++11")
 
-include_directories(${PYLON_ROOT}/include)
+include_directories(${PYLON_ROOT}/include kissfft)
+add_subdirectory(kissfft)
 link_directories(${PYLON_ROOT}/lib64)
 
 set(GRAB_SOURCE_FILES
@@ -45,7 +46,7 @@ set(WORK_SOURCE_FILES
         MockContextProvider.cc
         MockContextProvider.h
         AcquisitionContext.h
-        CameraContextProvider.cpp
+        CameraContextProvider.cc
         CameraContextProvider.h
         ContextSaver.h)
 
@@ -74,4 +75,5 @@ target_link_libraries(work
         dl
         m
         gcc_s
-        rt)
+        rt
+        kissfft)
