@@ -31,7 +31,7 @@ void MockContextProvider::loadFromFile(std::string filename) {
     }
   }
   us_delay = static_cast<unsigned long>(sum_diffs / (buffer.size() - 1));
-  std::cerr << "Camera will be mocked with " << buffer.size() << " samples and with " << us_delay
+  std::cout << "Camera will be mocked with " << buffer.size() << " samples and with " << us_delay
             << "us delay between samples."
             << " It " << (runInfinitely ? "will" : "won't") << " run indefinitely." << std::endl;
 }

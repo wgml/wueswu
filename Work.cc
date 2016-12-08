@@ -14,26 +14,13 @@ int main(int argc, char *argv[]) {
         std::string(argv[1]), true);
   } else {
     Pylon::PylonInitialize();
-    Pylon::IPylonDevice *pDevice;
-    try {
-      pDevice = Pylon::CTlFactory::GetInstance().CreateFirstDevice();
-    } catch (GenICam::GenericException &e) {
-      std::cerr << e.what() << std::endl;
-      return 2;
-    }
-    if (pDevice == nullptr) {
-      std::cerr << "Basler camera is not accessible." << std::endl;
-      return 1;
-    }
-
-    Pylon::CBaslerUsbInstantCamera camera(pDevice);
-    provider = std::make_shared<CameraContextProvider>(camera, 10000,
-                                                       800, 600, 30000);
+    Pylon::CBaslerUsbInstantCamera camera(Pylon::CTlFactory::GetInstance().CreateFirstDevice());
+    provider = std::make_shared<CameraContextProvider>(camera, 10000, 800, 600, 30000);
   }
-  HeartRateEstimator estimator{*provider};
+  HeartRateEstimator estimator{provider};
   estimator.init();
-  std::thread providerThread([&] { provider->run(); });
-  std::thread estimatorThread([&estimator] {estimator.run();});
+  std::thread providerThread([&provider] { provider->run(); });
+  std::thread estimatorThread([&estimator] {estimator.run(/*tps=*/10);});
 
   providerThread.join();
   estimatorThread.join();

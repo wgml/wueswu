@@ -6,12 +6,22 @@
 #include <mutex>
 #include "AcquisitionContext.h"
 
+#define _USE_MATH_DEFINES
+#include <cassert>
+
 class HeartRateEstimator;
 class ContextProvider {
 public:
   void subscribe(HeartRateEstimator *estimator) {
     this->estimator = estimator;
   }
+
+  void unsubscribe(HeartRateEstimator *estimator)
+  {
+    assert(this->estimator == estimator);
+    this->estimator = nullptr;
+  }
+
   virtual void run() = 0;
 
   virtual ~ContextProvider() = default;
@@ -22,13 +32,13 @@ protected:
 
 class HeartRateEstimator {
 public:
-  HeartRateEstimator(ContextProvider &provider)
+  HeartRateEstimator(std::shared_ptr<ContextProvider> provider)
       : provider(provider)
   {}
 
   void init();
 
-  void run();
+  void run(double = 1.0);
 
   void stop() {
     std::cerr << "Estimator received shutdown signal." << std::endl;
@@ -43,18 +53,20 @@ public:
   }
 
 private:
-  double estimate();
-  void get_raw_data(double *);
-  void filter_data(double*, double*);
-  void fft_data(double*, double*, double*, const double);
-  double determine_result(double*, double*);
+  static const size_t WINDOW_SIZE = 256;
+  using data_t = std::array<double, WINDOW_SIZE>;
 
-  const size_t WINDOW_SIZE = 512;
+  double estimate();
+  double get_raw_data(data_t&);
+  void filter_data(data_t&, data_t&);
+  void fft_data(data_t&, data_t&, data_t&, const double);
+  double determine_result(data_t&, data_t&);
+
   volatile bool work = false;
 
   std::deque<AcquisitionContext> data;
   std::mutex data_mutex;
-  ContextProvider &provider;
+  std::shared_ptr<ContextProvider> provider;
 };
 
 
