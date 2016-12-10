@@ -8,18 +8,13 @@
 #include <cassert>
 #include "FirFilter.h"
 #include "AcquisitionContext.h"
+#include "ResultAverage.h"
 
 class HeartRateEstimator;
 class ContextProvider {
 public:
   void subscribe(HeartRateEstimator *estimator) {
     this->estimator = estimator;
-  }
-
-  void unsubscribe(HeartRateEstimator *estimator)
-  {
-    assert(this->estimator == estimator);
-    this->estimator = nullptr;
   }
 
   virtual void run() = 0;
@@ -32,9 +27,11 @@ protected:
 
 class HeartRateEstimator {
 public:
-  HeartRateEstimator(std::shared_ptr<ContextProvider> provider)
+  HeartRateEstimator(std::shared_ptr<ContextProvider> provider, double min_freq = 0.75, double max_freq = 4)
     : provider(provider)
-    , filter(1, 0.5, 4)
+    , filter(1, min_freq, max_freq)
+    , min_freq(min_freq * 60)
+    , max_freq(max_freq * 60)
   {}
 
   void init();
@@ -55,6 +52,7 @@ public:
 
 private:
   static const size_t WINDOW_SIZE = 256;
+
   using data_t = std::array<double, WINDOW_SIZE>;
 
   double estimate();
@@ -63,13 +61,24 @@ private:
   void fft_data(const data_t&, data_t&, data_t&, const double);
   double determine_result(const data_t&, const data_t&);
 
+  bool is_valid(double estimate) {
+    return estimate >= min_freq && estimate <= max_freq;
+  }
+
   volatile bool work = false;
 
   std::deque<AcquisitionContext> data;
   std::mutex data_mutex;
+
+  ResultAverage<double, 10> average;
+
   std::shared_ptr<ContextProvider> provider;
 
   FirFilter<10> filter;
+
+  double min_freq;
+  double max_freq;
+
 };
 
 

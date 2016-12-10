@@ -49,7 +49,8 @@ set(WORK_SOURCE_FILES
         CameraContextProvider.cc
         CameraContextProvider.h
         ContextSaver.h
-	FirFilter.h)
+        FirFilter.h
+        ResultAverage.h)
 
 
 add_executable(work ${WORK_SOURCE_FILES})
