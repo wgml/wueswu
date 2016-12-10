@@ -4,10 +4,10 @@
 
 #include <deque>
 #include <mutex>
+#include <memory>
 #include <cassert>
-
-#include "AcquisitionContext.h"
 #include "FirFilter.h"
+#include "AcquisitionContext.h"
 
 class HeartRateEstimator;
 class ContextProvider {
