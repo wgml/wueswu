@@ -192,6 +192,7 @@
     <ClInclude Include="kissfft\tools\kiss_fftr.h" />
     <ClInclude Include="kissfft\_kiss_fft_guts.h" />
     <ClInclude Include="MockContextProvider.h" />
+    <ClInclude Include="ResultAverage.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

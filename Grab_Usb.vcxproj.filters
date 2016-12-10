@@ -60,5 +60,8 @@
     <ClInclude Include="FirFilter.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="ResultAverage.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
