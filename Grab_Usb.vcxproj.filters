@@ -57,5 +57,8 @@
     <ClInclude Include="kissfft\tools\kiss_fftr.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="FirFilter.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

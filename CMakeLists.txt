@@ -47,7 +47,8 @@ set(WORK_SOURCE_FILES
         AcquisitionContext.h
         CameraContextProvider.cpp
         CameraContextProvider.h
-        ContextSaver.h)
+        ContextSaver.h
+	FirFilter.h)
 
 
 add_executable(work ${WORK_SOURCE_FILES})

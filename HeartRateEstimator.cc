@@ -74,13 +74,12 @@ double HeartRateEstimator::get_raw_data(data_t &raw_data)
   return 1 / ((timestamp_diffs / 1e6) / (WINDOW_SIZE - 1));
 }
 
-void HeartRateEstimator::filter_data(data_t &raw_data, data_t &filtered_data)
+void HeartRateEstimator::filter_data(const data_t &raw_data, data_t &filtered_data)
 {
-  for (size_t i = 0; i < WINDOW_SIZE; i++)
-    filtered_data[i] = (0.54 - 0.46 * cos(2 * M_PI * i / (WINDOW_SIZE - 1))) * raw_data[i];
+  filter.filter(raw_data, filtered_data);
 }
 
-void HeartRateEstimator::fft_data(data_t &raw_data, data_t &fft_data_abs, data_t &fft_data_freq, const double avg_freq)
+void HeartRateEstimator::fft_data(const data_t &raw_data, data_t &fft_data_abs, data_t &fft_data_freq, const double avg_freq)
 {
   size_t nfft;
   for (nfft = 1; nfft < WINDOW_SIZE; nfft *= 2);
@@ -110,7 +109,7 @@ void HeartRateEstimator::fft_data(data_t &raw_data, data_t &fft_data_abs, data_t
   delete[] fft;
 }
 
-double HeartRateEstimator::determine_result(data_t &fft_abs, data_t &fft_freq)
+double HeartRateEstimator::determine_result(const data_t &fft_abs, const data_t &fft_freq)
 {
   const double freq_lo = 0.8, freq_hi = 3;
 

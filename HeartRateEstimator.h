@@ -4,10 +4,10 @@
 
 #include <deque>
 #include <mutex>
-#include "AcquisitionContext.h"
-
-#define _USE_MATH_DEFINES
 #include <cassert>
+
+#include "AcquisitionContext.h"
+#include "FirFilter.h"
 
 class HeartRateEstimator;
 class ContextProvider {
@@ -33,7 +33,8 @@ protected:
 class HeartRateEstimator {
 public:
   HeartRateEstimator(std::shared_ptr<ContextProvider> provider)
-      : provider(provider)
+    : provider(provider)
+    , filter(1, 0.5, 4)
   {}
 
   void init();
@@ -58,15 +59,17 @@ private:
 
   double estimate();
   double get_raw_data(data_t&);
-  void filter_data(data_t&, data_t&);
-  void fft_data(data_t&, data_t&, data_t&, const double);
-  double determine_result(data_t&, data_t&);
+  void filter_data(const data_t&, data_t&);
+  void fft_data(const data_t&, data_t&, data_t&, const double);
+  double determine_result(const data_t&, const data_t&);
 
   volatile bool work = false;
 
   std::deque<AcquisitionContext> data;
   std::mutex data_mutex;
   std::shared_ptr<ContextProvider> provider;
+
+  FirFilter<10> filter;
 };
 
 

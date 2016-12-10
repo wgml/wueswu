@@ -185,6 +185,7 @@
     <ClInclude Include="CameraContextProvider.h" />
     <ClInclude Include="ConfigDump.h" />
     <ClInclude Include="ContextSaver.h" />
+    <ClInclude Include="FirFilter.h" />
     <ClInclude Include="HeartRateEstimator.h" />
     <ClInclude Include="kissfft\kissfft.hh" />
     <ClInclude Include="kissfft\kiss_fft.h" />
