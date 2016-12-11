@@ -3,6 +3,7 @@
 
 #include <cassert>
 #include <array>
+
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <algorithm>
@@ -12,14 +13,14 @@ struct FirFilter
 {
   using data_t = std::array<double, 2 * M + 1>;
 
-  FirFilter(int fitler_type, double fs, double fc)
+  FirFilter(int filter_type, double fs, double fc)
   {
     static_assert(M > 0, "M must be greater than 0");
     double fcn = fc / (fs * 2);
     double wcn = 2 * M_PI*fcn;
 
     data_t samples;
-    if (fitler_type == 1)
+    if (filter_type == 1)
     {
 
       for (int i = -M, j = 0; i <= M; ++i, ++j)
@@ -45,12 +46,10 @@ struct FirFilter
       }
     }
 
-    data_t hamming;
     for (int k = 0; k <= N - 1; k++)
     {
-      hamming[k] = 0.54 - 0.46 * cos(2 * M_PI * k / (N - 1));
-      filter_coefs[k] = hamming[k] * samples[k];
-      std::cerr << filter_coefs[k] << std::endl;
+      auto hamming = 0.54 - 0.46 * cos(2 * M_PI * k / (N - 1));
+      filter_coeffs[k] = hamming * samples[k];
     }
   }
 
@@ -60,8 +59,8 @@ struct FirFilter
   void filter(const std::array<double, K> &raw_data, std::array<double, K> &filtered_data)
   {
     assert(K >= N);
-    size_t P = M - 1;
-    size_t L = K + P;
+    auto P = M - 1;
+    auto L = K + P;
 
     std::array<double, K + M - 1> signal_prim{};
     for (size_t i = 0; i < P; ++i)
@@ -69,19 +68,19 @@ struct FirFilter
 
     std::copy(raw_data.begin(), raw_data.end(), signal_prim.begin() + P);
 
-    for (size_t k = M; k <= L; ++k)
+    for (auto k = M; k <= L; ++k)
     {
       double v = 0;
       for (auto m = 0; m < M; ++m)
       {
-        v += filter_coefs[m] * signal_prim[k - m - 1];
+        v += filter_coeffs[m] * signal_prim[k - m - 1];
       }
       filtered_data[k - M] = v;
     }
   }
 
 private:
-  data_t filter_coefs;
+  data_t filter_coeffs;
   const int N = 2 * M + 1;
 };
 
