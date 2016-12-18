@@ -23,7 +23,7 @@ void HeartRateEstimator::run(double tps) {
     auto start_time = high_resolution_clock::now();
     auto hr_estimate = estimate();
     auto end_time = high_resolution_clock::now();
-    long execution_time = duration_cast<microseconds>(end_time - start_time).count();
+    auto execution_time = duration_cast<microseconds>(end_time - start_time).count();
     std::cout << "Determined heart rate is " << hr_estimate
       << ". There are " << data.size() << " samples in context. It took me "
       << execution_time << "us to execute." << std::endl;
@@ -35,7 +35,7 @@ void HeartRateEstimator::run(double tps) {
     } else {
       std::cout << "Estimated value is considered invalid." << std::endl;
     }
-    auto sleep_time = std::max<long>(0L, static_cast<long>(1e6 / tps) - execution_time);
+    auto sleep_time = std::max<long long>(0L, static_cast<long>(1e6 / tps) - execution_time);
     std::this_thread::sleep_for(microseconds{ sleep_time });
   }
 }

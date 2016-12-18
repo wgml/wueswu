@@ -59,11 +59,11 @@ struct FirFilter
   void filter(const std::array<double, K> &raw_data, std::array<double, K> &filtered_data)
   {
     assert(K >= N);
-    auto P = M - 1;
-    auto L = K + P;
+    int P = M - 1;
+    int L = K + P;
 
     std::array<double, K + M - 1> signal_prim{};
-    for (size_t i = 0; i < P; ++i)
+    for (auto i = 0; i < P; ++i)
       signal_prim[i] = raw_data[0];
 
     std::copy(raw_data.begin(), raw_data.end(), signal_prim.begin() + P);
