@@ -2,6 +2,10 @@
 #include "CameraContextProvider.h"
 
 void CameraContextProvider::run() {
+  Pylon::PylonInitialize();
+  Pylon::CBaslerUsbInstantCamera camera(Pylon::CTlFactory::GetInstance().CreateFirstDevice());
+  init(camera, width, height, exposureTime);
+
   camera.StartGrabbing(imagesToGrab); //@@@@@@@@
 
   Pylon::CGrabResultPtr ptrGrabResult;
@@ -18,7 +22,9 @@ void CameraContextProvider::run() {
   estimator->stop();
 }
 
-void CameraContextProvider::init(int width, int height, int exposureTime) {
+void CameraContextProvider::init(Pylon::CBaslerUsbInstantCamera &camera, int width, int height, int exposureTime) {
+  camera.Open();
+
   int maxWidth = 2040;
   int maxHeight = 1086;
   int offsetX = (((maxWidth - width) / 2) / 2) * 2;
@@ -26,17 +32,16 @@ void CameraContextProvider::init(int width, int height, int exposureTime) {
   std::cerr << width << "x" << height << "+" << offsetX << "+" << offsetY << " e=" << exposureTime
             << std::endl;
 
-  camera.Open();
   camera.Width = width;
   camera.Height = height;
   camera.OffsetX = offsetX;
   camera.OffsetY = offsetY;
   camera.ExposureTime = exposureTime;
   camera.MaxNumBuffer = 100;
-  setPixelFormat();
+  setPixelFormat(camera);
 }
 
-void CameraContextProvider::setPixelFormat() {
+void CameraContextProvider::setPixelFormat(Pylon::CBaslerUsbInstantCamera &camera) {
   try {
     CEnumerationPtr pixelFormat(camera.GetNodeMap().GetNode("PixelFormat"));
     if (IsAvailable(pixelFormat->GetEntryByName("BayerBG8"))) {

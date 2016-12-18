@@ -7,15 +7,13 @@
 
 // i suggest passing argument to main, e.g. C:/Users/vka/Documents/wueswu/Grab/data/ania_biale_6_exp=30000.txt
 int main(int argc, char *argv[]) {
-  bool mock = argc > 1;
+  bool mock = true;
   std::shared_ptr<ContextProvider> provider;
   if (mock) {
     provider = std::make_shared<MockContextProvider>(
         std::string(argv[1]), true);
   } else {
-    Pylon::PylonInitialize();
-    Pylon::CBaslerUsbInstantCamera camera(Pylon::CTlFactory::GetInstance().CreateFirstDevice());
-    provider = std::make_shared<CameraContextProvider>(camera, 10000, 800, 600, 30000);
+    provider = std::make_shared<CameraContextProvider>( 100000, 800, 600, 30000);
   }
   HeartRateEstimator estimator{provider};
   estimator.init();

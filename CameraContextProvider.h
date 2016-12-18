@@ -18,22 +18,24 @@ using GenApi_3_0_Basler_pylon_v5_0::IsAvailable;
 class CameraContextProvider : public ContextProvider {
 
 public:
-  CameraContextProvider(Pylon::CBaslerUsbInstantCamera &camera, size_t imagesToGrab,
+  CameraContextProvider(size_t imagesToGrab,
                         int width, int height, int exposureTime)
-      : camera(camera), imagesToGrab(imagesToGrab) {
-    init(width, height, exposureTime);
-  }
+      : imagesToGrab(imagesToGrab)
+      , width(width)
+      , height(height)
+      , exposureTime(exposureTime){}
 
-  void init(int width, int height, int exposureTime);
+  void init(Pylon::CBaslerUsbInstantCamera&, int width, int height, int exposureTime);
 
   void run() override;
 
 private:
   ContextSaver contextSaver;
-  Pylon::CBaslerUsbInstantCamera &camera;
   size_t imagesToGrab;
-
-  void setPixelFormat();
+  int width;
+  int height;
+  int exposureTime;
+  void setPixelFormat(Pylon::CBaslerUsbInstantCamera&);
 
   void grabSucceeded(Pylon::CGrabResultPtr resultPtr, unsigned int idx);
 

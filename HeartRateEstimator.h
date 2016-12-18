@@ -27,7 +27,7 @@ protected:
 
 class HeartRateEstimator {
 public:
-  HeartRateEstimator(std::shared_ptr<ContextProvider> provider, double min_freq = 0.75, double max_freq = 4)
+  HeartRateEstimator(std::shared_ptr<ContextProvider> provider, double min_freq = 0.75, double max_freq = 3.25)
     : provider(provider)
     , filter(1, min_freq, max_freq)
     , min_freq(min_freq * 60)
@@ -51,7 +51,7 @@ public:
   }
 
 private:
-  static const size_t WINDOW_SIZE = 256;
+  static const size_t WINDOW_SIZE = 1024;
 
   using data_t = std::array<double, WINDOW_SIZE>;
 
@@ -70,7 +70,7 @@ private:
   std::deque<AcquisitionContext> data;
   std::mutex data_mutex;
 
-  ResultAverage<double, 10> average;
+  ResultAverage<double, 50> average;
 
   std::shared_ptr<ContextProvider> provider;
 
