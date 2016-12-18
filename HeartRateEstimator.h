@@ -27,11 +27,10 @@ protected:
 
 class HeartRateEstimator {
 public:
-  HeartRateEstimator(std::shared_ptr<ContextProvider> provider, double min_freq = 0.75, double max_freq = 3.25)
+  HeartRateEstimator(std::shared_ptr<ContextProvider> provider, double min_freq = 0.66, double max_freq = 2.66)
     : provider(provider)
-    , filter(1, min_freq, max_freq)
-    , min_freq(min_freq * 60)
-    , max_freq(max_freq * 60)
+    , min_freq(min_freq)
+    , max_freq(max_freq)
   {}
 
   void init();
@@ -56,13 +55,16 @@ private:
   using data_t = std::array<double, WINDOW_SIZE>;
 
   double estimate();
+
   double get_raw_data(data_t&);
-  void filter_data(const data_t&, data_t&);
+  void normalize_data(const data_t&, data_t&);
+  void kalman_data(const data_t&, data_t&);
+  void filter_data(const data_t&, data_t&, double);
   void fft_data(const data_t&, data_t&, data_t&, const double);
   double determine_result(const data_t&, const data_t&);
 
   bool is_valid(double estimate) {
-    return estimate >= min_freq && estimate <= max_freq;
+    return estimate >= min_freq * 60 && estimate <= max_freq * 60;
   }
 
   volatile bool work = false;
@@ -70,11 +72,9 @@ private:
   std::deque<AcquisitionContext> data;
   std::mutex data_mutex;
 
-  ResultAverage<double, 50> average;
+  ResultAverage<double, 30> average;
 
   std::shared_ptr<ContextProvider> provider;
-
-  FirFilter<10> filter;
 
   double min_freq;
   double max_freq;

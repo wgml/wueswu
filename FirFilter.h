@@ -13,7 +13,7 @@ struct FirFilter
 {
   using data_t = std::array<double, 2 * M + 1>;
 
-  FirFilter(int filter_type, double fs, double fc)
+  FirFilter(int filter_type, double fs, double fc, bool is_hamming = false)
   {
     static_assert(M > 0, "M must be greater than 0");
     double fcn = fc / (fs * 2);
@@ -48,8 +48,12 @@ struct FirFilter
 
     for (int k = 0; k <= N - 1; k++)
     {
-      auto hamming = 0.54 - 0.46 * cos(2 * M_PI * k / (N - 1));
-      filter_coeffs[k] = hamming * samples[k];
+      if (is_hamming) {
+        auto hamming = 0.54 - 0.46 * cos(2 * M_PI * k / (N - 1));
+        filter_coeffs[k] = hamming * samples[k];
+      } else {
+        filter_coeffs[k] = samples[k];
+      }
     }
   }
 

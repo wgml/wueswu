@@ -1,8 +1,8 @@
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.0)
 project(wueswu)
 set(PYLON_ROOT ~/Programming/C/libs/pylon5)
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
-set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -std=c++11 -O3")
 
 include_directories(${PYLON_ROOT}/include kissfft)
 add_subdirectory(kissfft)
@@ -50,6 +50,7 @@ set(WORK_SOURCE_FILES
         CameraContextProvider.h
         ContextSaver.h
         FirFilter.h
+        KalmanFilter.h
         ResultAverage.h)
 
 

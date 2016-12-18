@@ -6,7 +6,7 @@ void CameraContextProvider::run() {
   Pylon::CBaslerUsbInstantCamera camera(Pylon::CTlFactory::GetInstance().CreateFirstDevice());
   init(camera, width, height, exposureTime);
 
-  camera.StartGrabbing(imagesToGrab); //@@@@@@@@
+  camera.StartGrabbing(imagesToGrab);
 
   Pylon::CGrabResultPtr ptrGrabResult;
 
@@ -20,6 +20,7 @@ void CameraContextProvider::run() {
     }
   }
   estimator->stop();
+  Pylon::PylonTerminate();
 }
 
 void CameraContextProvider::init(Pylon::CBaslerUsbInstantCamera &camera, int width, int height, int exposureTime) {

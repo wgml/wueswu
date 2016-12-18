@@ -1,13 +1,13 @@
 #include <iostream>
-#include "HeartRateEstimator.h"
-#include <cassert>
 #include <thread>
-#include <array>
-#include <chrono>
 #include <algorithm>
+#include <numeric>
+#include <vector>
 
 #include "kissfft/kiss_fft.h"
 #include "kissfft/tools/kiss_fftr.h"
+#include "KalmanFilter.h"
+#include "HeartRateEstimator.h"
 
 using std::chrono::high_resolution_clock;
 using std::chrono::duration_cast;
@@ -54,11 +54,15 @@ double HeartRateEstimator::estimate() {
     assert(frequency > 0);
   }
   std::cerr << " Determined signal freq is " << frequency << std::endl;
+  data_t normalized_data;
+  data_t kalmaned_data;
   data_t filtered_data;
   data_t ffted_data;
   data_t ffted_freq;
 
-  filter_data(raw_data, filtered_data);
+  normalize_data(raw_data, normalized_data);
+  kalman_data(normalized_data, kalmaned_data);
+  filter_data(kalmaned_data, filtered_data, frequency);
   fft_data(filtered_data, ffted_data, ffted_freq, frequency);
   double result = determine_result(ffted_data, ffted_freq);
 
@@ -81,9 +85,36 @@ double HeartRateEstimator::get_raw_data(data_t &raw_data)
   return 1 / ((timestamp_diffs / 1e6) / (WINDOW_SIZE - 1));
 }
 
-void HeartRateEstimator::filter_data(const data_t &raw_data, data_t &filtered_data)
+void HeartRateEstimator::normalize_data(const data_t &raw_data, data_t &normalized_data) {
+  // todo-wojtek linked list impl for mean and stddev
+  // todo-wojtek this can be also shared between estimations, just as kalman_data can
+  normalized_data[0] = 0;
+  for (size_t i = 1; i < raw_data.size(); i++) {
+    auto window_begin = (i < WINDOW_SIZE - 1) ? raw_data.begin() : raw_data.begin() + (i - WINDOW_SIZE + 1);
+    auto window_end = raw_data.begin() + i + 1;
+    auto size = (i < WINDOW_SIZE - 1) ? i + 1 : WINDOW_SIZE;
+
+    auto sum = std::accumulate(window_begin, window_end, 0.0);
+    auto mean = sum / size;
+
+    std::vector<data_t::value_type> diff(size);
+    std::transform(window_begin, window_end, diff.begin(), [mean](double x) { return x - mean; });
+    auto sq_sum = std::inner_product(diff.begin(), diff.end(), diff.begin(), 0.0);
+    auto stdev = std::sqrt(sq_sum / size);
+
+    normalized_data[i] = (raw_data[i] - mean) / stdev;
+  }
+}
+
+void HeartRateEstimator::kalman_data(const data_t &normalized_data, data_t &kalmaned_data) {
+  kalman_filter::predict(normalized_data, kalmaned_data);
+}
+
+void HeartRateEstimator::filter_data(const data_t &raw_data, data_t &filtered_data, double sampling_rate)
 {
-  filter.filter(raw_data, filtered_data);
+  data_t tmp_data;
+  FirFilter<10>{1, sampling_rate, max_freq}.filter(raw_data, tmp_data);
+  FirFilter<10>{2, sampling_rate, min_freq}.filter(tmp_data, filtered_data);
 }
 
 void HeartRateEstimator::fft_data(const data_t &raw_data, data_t &fft_data_abs, data_t &fft_data_freq, const double avg_freq)
@@ -118,7 +149,7 @@ void HeartRateEstimator::fft_data(const data_t &raw_data, data_t &fft_data_abs, 
 
 double HeartRateEstimator::determine_result(const data_t &fft_abs, const data_t &fft_freq)
 {
-  const double freq_lo = 0.8, freq_hi = 3;
+  const double freq_lo = min_freq, freq_hi = max_freq;
 
   size_t idx;
   double max_freq = -1;
@@ -133,11 +164,8 @@ double HeartRateEstimator::determine_result(const data_t &fft_abs, const data_t 
       break;
     }
   }
-  for (idx++; idx < WINDOW_SIZE; idx++)
+  for (idx++; idx < WINDOW_SIZE && fft_freq[idx] <= freq_hi; idx++)
   {
-    if (fft_freq[idx] > freq_hi)
-      break;
-
     if (max_freq_val < fft_abs[idx])
     {
       max_freq = fft_freq[idx];
