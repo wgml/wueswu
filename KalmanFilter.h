@@ -2,6 +2,8 @@
 #ifndef WUESWU_KALMANFILTER_H
 #define WUESWU_KALMANFILTER_H
 
+#include <array>
+
 namespace kalman_filter {
 template<size_t N>
 void predict(const std::array<double, N> &measurements, std::array<double, N> &prediction) {

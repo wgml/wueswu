@@ -187,6 +187,7 @@
     <ClInclude Include="ContextSaver.h" />
     <ClInclude Include="FirFilter.h" />
     <ClInclude Include="HeartRateEstimator.h" />
+    <ClInclude Include="KalmanFilter.h" />
     <ClInclude Include="kissfft\kissfft.hh" />
     <ClInclude Include="kissfft\kiss_fft.h" />
     <ClInclude Include="kissfft\tools\kiss_fftr.h" />

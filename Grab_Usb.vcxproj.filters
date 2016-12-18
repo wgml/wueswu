@@ -5,6 +5,9 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="Source Files\kiss_fft">
+      <UniqueIdentifier>{d1068afb-3286-4853-819d-dd86e13c618c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MockContextProvider.cc">
@@ -19,11 +22,11 @@
     <ClCompile Include="CameraContextProvider.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="kissfft\kiss_fft.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="kissfft\tools\kiss_fftr.c">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\kiss_fft</Filter>
+    </ClCompile>
+    <ClCompile Include="kissfft\kiss_fft.c">
+      <Filter>Source Files\kiss_fft</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -45,23 +48,26 @@
     <ClInclude Include="HeartRateEstimator.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="kissfft\_kiss_fft_guts.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="kissfft\kiss_fft.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="kissfft\kissfft.hh">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="kissfft\tools\kiss_fftr.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="FirFilter.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="ResultAverage.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KalmanFilter.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="kissfft\_kiss_fft_guts.h">
+      <Filter>Source Files\kiss_fft</Filter>
+    </ClInclude>
+    <ClInclude Include="kissfft\tools\kiss_fftr.h">
+      <Filter>Source Files\kiss_fft</Filter>
+    </ClInclude>
+    <ClInclude Include="kissfft\kiss_fft.h">
+      <Filter>Source Files\kiss_fft</Filter>
+    </ClInclude>
+    <ClInclude Include="kissfft\kissfft.hh">
+      <Filter>Source Files\kiss_fft</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
