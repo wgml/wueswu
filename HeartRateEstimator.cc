@@ -86,24 +86,17 @@ double HeartRateEstimator::get_raw_data(data_t &raw_data)
 }
 
 void HeartRateEstimator::normalize_data(const data_t &raw_data, data_t &normalized_data) {
-  // todo-wojtek linked list impl for mean and stddev
-  // todo-wojtek this can be also shared between estimations, just as kalman_data can
-  normalized_data[0] = 0;
-  for (size_t i = 1; i < raw_data.size(); i++) {
-    auto window_begin = (i < WINDOW_SIZE - 1) ? raw_data.begin() : raw_data.begin() + (i - WINDOW_SIZE + 1);
-    auto window_end = raw_data.begin() + i + 1;
-    auto size = (i < WINDOW_SIZE - 1) ? i + 1 : WINDOW_SIZE;
+  auto sum = std::accumulate(raw_data.begin(), raw_data.end(), 0.0);
+  auto mean = sum / WINDOW_SIZE;
 
-    auto sum = std::accumulate(window_begin, window_end, 0.0);
-    auto mean = sum / size;
+  std::vector<data_t::value_type> diff(WINDOW_SIZE);
+  std::transform(raw_data.begin(), raw_data.end(), diff.begin(),
+                 [mean](double x) { return x - mean; });
+  auto sq_sum = std::inner_product(diff.begin(), diff.end(), diff.begin(), 0.0);
+  auto stdev = std::sqrt(sq_sum / WINDOW_SIZE);
 
-    std::vector<data_t::value_type> diff(size);
-    std::transform(window_begin, window_end, diff.begin(), [mean](double x) { return x - mean; });
-    auto sq_sum = std::inner_product(diff.begin(), diff.end(), diff.begin(), 0.0);
-    auto stdev = std::sqrt(sq_sum / size);
-
+  for (size_t i = 0; i < raw_data.size(); i++)
     normalized_data[i] = (raw_data[i] - mean) / stdev;
-  }
 }
 
 void HeartRateEstimator::kalman_data(const data_t &normalized_data, data_t &kalmaned_data) {
