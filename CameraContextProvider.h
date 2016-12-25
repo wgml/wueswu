@@ -3,8 +3,8 @@
 
 #include <pylon/PylonIncludes.h>
 
-#undef PYLON_WIN_BUILD
 #ifdef PYLON_WIN_BUILD
+#warning "PYLON_WIN_BUILD is defined. I'll compile with acquisition result presented. It might limit algorithm capabilities."
 #include <pylon/PylonGUI.h>
 #endif
 
@@ -20,12 +20,7 @@ class CameraContextProvider : public ContextProvider {
 public:
   CameraContextProvider(size_t imagesToGrab,
                         int width, int height, int exposureTime)
-      : imagesToGrab(imagesToGrab)
-      , width(width)
-      , height(height)
-      , exposureTime(exposureTime){}
-
-  void init(Pylon::CBaslerUsbInstantCamera&, int width, int height, int exposureTime);
+      : imagesToGrab(imagesToGrab), width(width), height(height), exposureTime(exposureTime) {}
 
   void run() override;
 
@@ -35,7 +30,10 @@ private:
   int width;
   int height;
   int exposureTime;
-  void setPixelFormat(Pylon::CBaslerUsbInstantCamera&);
+
+  void init(Pylon::CBaslerUsbInstantCamera &, int width, int height, int exposureTime);
+
+  void setPixelFormat(Pylon::CBaslerUsbInstantCamera &);
 
   void grabSucceeded(Pylon::CGrabResultPtr resultPtr, unsigned int idx);
 

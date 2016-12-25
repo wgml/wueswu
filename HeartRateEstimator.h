@@ -19,7 +19,7 @@ public:
 
   virtual void run() = 0;
 
-  virtual ~ContextProvider() = default;
+    virtual ~ContextProvider() = default;
 
 protected:
   HeartRateEstimator *estimator = nullptr;

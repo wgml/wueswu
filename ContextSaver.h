@@ -7,12 +7,15 @@
 class ContextSaver {
 public:
   ContextSaver()
-      : file(std::fstream()) {
-    file.open(file_name(), std::fstream::out);
+      : file(file_name(), std::fstream::out) {
   }
 
   ~ContextSaver() {
     file.close();
+  }
+
+  void save_context(std::chrono::microseconds micros, unsigned long sum, unsigned long cnt) {
+    file << micros.count() << " " << sum << " " << cnt << std::endl;
   }
 
   void save_context(Pylon::CGrabResultPtr ptrGrabResult, int img_idx) {
@@ -37,14 +40,11 @@ public:
     save_context(current_micros(), sum, cnt);
   }
 
-  void save_context(std::chrono::microseconds micros, unsigned long sum, unsigned long cnt) {
-    file << micros.count() << " " << sum << " " << cnt << std::endl;
-  }
-
 private:
+
   std::fstream file;
 
-  Pylon::String_t file_name() const {
+  static Pylon::String_t file_name() {
     auto init_time = std::chrono::duration_cast<std::chrono::seconds>(
         std::chrono::system_clock::now().time_since_epoch());
     std::ostringstream stream;
@@ -52,7 +52,7 @@ private:
     return stream.str().c_str();
   }
 
-  std::chrono::microseconds current_micros() const {
+  static std::chrono::microseconds current_micros() {
     return std::chrono::duration_cast<std::chrono::microseconds>(
         std::chrono::system_clock::now().time_since_epoch());
   }

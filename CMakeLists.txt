@@ -39,6 +39,15 @@ target_link_libraries(grab
         gcc_s
         rt)
 
+
+if(COMPILE_GUI)
+    if(WIN32)
+        add_definitions(-DPYLON_WIN_BUILD)
+    else()
+        message(FATAL_ERROR "COMPILE_GUI is windows-only")
+    endif()
+endif()
+
 set(WORK_SOURCE_FILES
         Work.cc
         HeartRateEstimator.cc
@@ -54,8 +63,8 @@ set(WORK_SOURCE_FILES
         ResultAverage.h)
 
 
-add_executable(work ${WORK_SOURCE_FILES})
-target_link_libraries(work
+add_executable(project ${WORK_SOURCE_FILES})
+target_link_libraries(project
         pylonbase
         GenApi_gcc_v3_0_Basler_pylon_v5_0
         GCBase_gcc_v3_0_Basler_pylon_v5_0

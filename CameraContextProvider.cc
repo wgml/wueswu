@@ -2,28 +2,35 @@
 #include "CameraContextProvider.h"
 
 void CameraContextProvider::run() {
-  Pylon::PylonInitialize();
-  Pylon::CBaslerUsbInstantCamera camera(Pylon::CTlFactory::GetInstance().CreateFirstDevice());
-  init(camera, width, height, exposureTime);
+  try {
+    Pylon::PylonInitialize();
+    Pylon::CBaslerUsbInstantCamera camera(Pylon::CTlFactory::GetInstance().CreateFirstDevice());
+    init(camera, width, height, exposureTime);
 
-  camera.StartGrabbing(imagesToGrab);
+    camera.StartGrabbing(imagesToGrab);
 
-  Pylon::CGrabResultPtr ptrGrabResult;
+    Pylon::CGrabResultPtr ptrGrabResult;
 
-  for (unsigned int idx = 0; idx < imagesToGrab && camera.IsGrabbing(); idx++) {
-    camera.RetrieveResult(10000, ptrGrabResult, Pylon::TimeoutHandling_Return);
+    for (unsigned int idx = 0; idx < imagesToGrab && camera.IsGrabbing(); idx++) {
+      camera.RetrieveResult(10000, ptrGrabResult, Pylon::TimeoutHandling_Return);
 
-    if (ptrGrabResult->GrabSucceeded()) {
-      grabSucceeded(ptrGrabResult, idx);
-    } else {
-      grabFailed(ptrGrabResult, idx);
+      if (ptrGrabResult->GrabSucceeded()) {
+        grabSucceeded(ptrGrabResult, idx);
+      } else {
+        grabFailed(ptrGrabResult, idx);
+      }
     }
+    estimator->stop();
+    Pylon::PylonTerminate();
+  } catch (...) {
+    std::cout << "Unexpected exception. Is basler camera accessible?" << std::endl;
+    estimator->stop();
   }
-  estimator->stop();
-  Pylon::PylonTerminate();
+
 }
 
-void CameraContextProvider::init(Pylon::CBaslerUsbInstantCamera &camera, int width, int height, int exposureTime) {
+void CameraContextProvider::init(Pylon::CBaslerUsbInstantCamera &camera, int width, int height,
+                                 int exposureTime) {
   camera.Open();
 
   int maxWidth = 2040;
@@ -58,25 +65,28 @@ void CameraContextProvider::setPixelFormat(Pylon::CBaslerUsbInstantCamera &camer
 }
 
 void CameraContextProvider::grabSucceeded(Pylon::CGrabResultPtr resultPtr, unsigned int idx) {
+#ifdef PYLON_WIN_BUILD
+  Pylon::DisplayImage(1, ptrGrabResult);
+#endif
+
   auto width = resultPtr->GetWidth();
   auto height = resultPtr->GetHeight();
 
   std::cerr << "#" << idx << " " << width << "x" << height << std::endl;
 
-  const uint8_t* pImageBuffer = static_cast<uint8_t *>(resultPtr->GetBuffer());
+  const uint8_t *pImageBuffer = static_cast<uint8_t *>(resultPtr->GetBuffer());
 
   unsigned long sum = 0;
   unsigned long cnt = 0;
-  for (size_t row = 0; row < width; row++)
-  {
-    for (size_t col = (row + 1) % 2; col < height; col += 2)
-    {
+  for (size_t row = 0; row < width; row++) {
+    for (size_t col = (row + 1) % 2; col < height; col += 2) {
       cnt++;
       sum += pImageBuffer[row * height + col];
     }
   }
 
-  std::cerr << "#" << idx << " " << "sum: " << sum << " cnt: " << cnt << " result: " << sum / cnt << std::endl;
+  std::cerr << "#" << idx << " " << "sum: " << sum << " cnt: " << cnt << " result: " << sum / cnt
+            << std::endl;
 
   auto now = std::chrono::duration_cast<std::chrono::microseconds>(
       std::chrono::system_clock::now().time_since_epoch());

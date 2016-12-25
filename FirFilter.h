@@ -9,45 +9,37 @@
 #include <algorithm>
 
 template<int M>
-struct FirFilter
-{
+struct FirFilter {
   using data_t = std::array<double, 2 * M + 1>;
 
-  FirFilter(int filter_type, double fs, double fc, bool is_hamming = false)
-  {
+  FirFilter(int filter_type, double fs, double fc, bool is_hamming = false) {
     static_assert(M > 0, "M must be greater than 0");
     double fcn = fc / (fs * 2);
-    double wcn = 2 * M_PI*fcn;
+    double wcn = 2 * M_PI * fcn;
 
     data_t samples;
-    if (filter_type == 1)
-    {
+    if (filter_type == 1) {
 
-      for (int i = -M, j = 0; i <= M; ++i, ++j)
-      {
-        if (i<0)
-          samples[j] = sin(wcn*i) / (M_PI*i);
+      for (int i = -M, j = 0; i <= M; ++i, ++j) {
+        if (i < 0)
+          samples[j] = sin(wcn * i) / (M_PI * i);
         else if (i == 0)
           samples[j] = wcn / M_PI;
         else
-          samples[j] = sin(wcn*i) / (M_PI*i);
+          samples[j] = sin(wcn * i) / (M_PI * i);
       }
-    }
-    else
-    {
-      for (int i = -M, j = 0; i <= M; ++i, ++j)
-      {
+    } else {
+      for (int i = -M, j = 0; i <= M; ++i, ++j) {
         if (i < 0)
-          samples[j] = -sin(wcn*i) / (M_PI*i);
+          samples[j] = -sin(wcn * i) / (M_PI * i);
         else if (i == 0)
           samples[j] = 1 - wcn / M_PI;
         else
-          samples[j] = -sin(wcn*i) / (M_PI*i);
+          samples[j] = -sin(wcn * i) / (M_PI * i);
       }
     }
 
-    for (int k = 0; k <= N - 1; k++)
-    {
+    for (int k = 0; k <= N - 1; k++) {
       if (is_hamming) {
         auto hamming = 0.54 - 0.46 * cos(2 * M_PI * k / (N - 1));
         filter_coeffs[k] = hamming * samples[k];
@@ -60,11 +52,10 @@ struct FirFilter
   ~FirFilter() = default;
 
   template<size_t K>
-  void filter(const std::array<double, K> &raw_data, std::array<double, K> &filtered_data)
-  {
+  void filter(const std::array<double, K> &raw_data, std::array<double, K> &filtered_data) {
     assert(K >= N);
     int P = M - 1;
-    int L = K + P;
+    ssize_t L = K + P;
 
     std::array<double, K + M - 1> signal_prim{};
     for (auto i = 0; i < P; ++i)
@@ -72,11 +63,9 @@ struct FirFilter
 
     std::copy(raw_data.begin(), raw_data.end(), signal_prim.begin() + P);
 
-    for (auto k = M; k <= L; ++k)
-    {
+    for (auto k = M; k <= L; ++k) {
       double v = 0;
-      for (auto m = 0; m < M; ++m)
-      {
+      for (auto m = 0; m < M; ++m) {
         v += filter_coeffs[m] * signal_prim[k - m - 1];
       }
       filtered_data[k - M] = v;
