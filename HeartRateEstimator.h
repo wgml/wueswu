@@ -50,7 +50,7 @@ public:
   }
 
 private:
-  static const size_t WINDOW_SIZE = 1024;
+  static const size_t WINDOW_SIZE = 1980;
 
   using data_t = std::array<double, WINDOW_SIZE>;
 

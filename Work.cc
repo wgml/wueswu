@@ -13,7 +13,7 @@ int main(int argc, char *argv[]) {
     provider = std::make_shared<MockContextProvider>(
         std::string(argv[1]), true);
   } else {
-    provider = std::make_shared<CameraContextProvider>( 100000, 800, 600, 30000);
+    provider = std::make_shared<CameraContextProvider>( 100000, 1000, 800, 15000);
   }
   HeartRateEstimator estimator{provider};
   estimator.init();

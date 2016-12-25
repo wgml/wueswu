@@ -24,7 +24,8 @@ void HeartRateEstimator::run(double tps) {
     auto hr_estimate = estimate();
     auto end_time = high_resolution_clock::now();
     auto execution_time = duration_cast<microseconds>(end_time - start_time).count();
-    std::cout << "Determined heart rate is " << hr_estimate
+    std::cout << std::chrono::duration_cast<std::chrono::microseconds>(
+      std::chrono::system_clock::now().time_since_epoch()).count() << " determined heart rate is " << hr_estimate
       << ". There are " << data.size() << " samples in context. It took me "
       << execution_time << "us to execute." << std::endl;
 
