@@ -18,6 +18,22 @@ using GenApi_3_0_Basler_pylon_v5_0::IsAvailable;
 class CameraContextProvider : public ContextProvider {
 
 public:
+  /**
+   * Constructor for camera context provider. Camera initialization is not performed
+   * on construction.
+   *
+   * Create date:
+   *    16/11/27
+   * Last modification date:
+   *    16/12/25
+   *
+   * @authors Anna Musiał, Wojciech Gumuła
+   *
+   * @param imagesToGrab number of images should be acquired. Execution is stopped when desired number is reached.
+   * @param width width of roi, centered
+   * @param height height of roi, centered
+   * @param exposureTime exposure time for camera
+   */
   CameraContextProvider(size_t imagesToGrab,
                         int width, int height, int exposureTime)
       : imagesToGrab(imagesToGrab), width(width), height(height), exposureTime(exposureTime) {}

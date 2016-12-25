@@ -14,10 +14,36 @@ public:
     file.close();
   }
 
+  /**
+   * Save given context into existing context file.
+   * Create date:
+   *    16/11/16
+   * Last modification date:
+   *    16/12/25
+   *
+   * @authors Anna Musiał, Wojciech Gumuła
+   *
+   * @param micros acquisition time
+   * @param sum determined sum of green pixels
+   * @param cnt determined number of green pixels
+   */
   void save_context(std::chrono::microseconds micros, unsigned long sum, unsigned long cnt) {
     file << micros.count() << " " << sum << " " << cnt << std::endl;
   }
 
+  /**
+   * Compute and save context into existing context file.
+   * Create date:
+   *    16/11/16
+   * Last modification date:
+   *    16/12/25
+   *
+   * @authors Anna Musiał, Wojciech Gumuła
+   *
+   * @see ContextSaver::save_context(std::chrono::microseconds micros, unsigned long sum, unsigned long cnt);
+   * @param ptrGrabResult
+   * @param img_idx
+   */
   void save_context(Pylon::CGrabResultPtr ptrGrabResult, int img_idx) {
     auto width = ptrGrabResult->GetWidth();
     auto height = ptrGrabResult->GetHeight();

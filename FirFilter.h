@@ -8,17 +8,44 @@
 #include <math.h>
 #include <algorithm>
 
+/**
+ * Class implementing windowed FIR filter.
+ * Create date:
+ *    16/12/10
+ * Last modification date:
+ *    16/12/25
+ *
+ * @authors Anna Musiał, Wojciech Gumuła
+ *
+ * @tparam M Window size is determined as 2 * M +1. Thus, M shall be a positive integer.
+ */
 template<int M>
 struct FirFilter {
   using data_t = std::array<double, 2 * M + 1>;
 
-  FirFilter(int filter_type, double fs, double fc, bool is_hamming = false) {
+  /**
+   * Construction custom hamming or rectangular window.
+   * Can produce low or high pass filter for given signal and filtering frequency.
+   *
+   * Create date:
+   *    16/12/10
+   * Last modification date:
+   *    16/12/25
+   *
+   * @authors Anna Musiał, Wojciech Gumuła
+   *
+   * @param is_low_pass determines if filter is low or high pass
+   * @param fs signal sampling rate
+   * @param fc fitering frequency
+   * @param is_hamming Implements hamming window if true, rectangular otherwise
+   */
+  FirFilter(bool is_low_pass, double fs, double fc, bool is_hamming = false) {
     static_assert(M > 0, "M must be greater than 0");
     double fcn = fc / (fs * 2);
     double wcn = 2 * M_PI * fcn;
 
     data_t samples;
-    if (filter_type == 1) {
+    if (is_low_pass) {
 
       for (int i = -M, j = 0; i <= M; ++i, ++j) {
         if (i < 0)
@@ -51,6 +78,21 @@ struct FirFilter {
 
   ~FirFilter() = default;
 
+
+  /**
+   * Filters input signal with given filter.
+   *
+   * Create date:
+   *    16/12/10
+   * Last modification date:
+   *    16/12/25
+   *
+   * @authors Anna Musiał, Wojciech Gumuła
+   *
+   * @tparam K signal length
+   * @param raw_data input data container
+   * @param filtered_data container for output data
+   */
   template<size_t K>
   void filter(const std::array<double, K> &raw_data, std::array<double, K> &filtered_data) {
     assert(K >= N);

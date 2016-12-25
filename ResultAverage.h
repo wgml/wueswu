@@ -3,6 +3,8 @@
 #define WUESWU_RESULTAVERAGE_H
 
 #include <deque>
+#include <numeric>
+
 template<typename T, size_t Count = 10>
 class ResultAverage {
 public:
@@ -15,13 +17,11 @@ public:
     if (values.size() == Count)
       values.pop_front();
     values.push_back(new_value);
-
-    T sum = 0;
-    for (auto &e : values)
-      sum += e;
+    T sum = std::accumulate(values.begin(), values.end(), 0.0);
     auto num = values.size();
     return AverageResult{sum / num, num};
   }
+
 private:
   std::deque<T> values;
 };

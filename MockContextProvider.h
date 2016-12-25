@@ -7,6 +7,20 @@
 
 class MockContextProvider : public ContextProvider {
 public:
+
+  /**
+   * Provides context from given file with desired signal frequency.
+   * Can run infinitely or one-time.
+   * Create date:
+   *    16/11/27
+   * Last modification date:
+   *    16/12/25
+   *
+   * @authors Anna Musiał, Wojciech Gumuła
+   *
+   * @param filename File containing context entries
+   * @param runInfinitely flag determining if data from file should be looped
+   */
   MockContextProvider(std::string filename, bool runInfinitely)
       : runInfinitely(runInfinitely) {
     loadFromFile(filename);

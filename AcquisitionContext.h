@@ -4,6 +4,16 @@
 
 #include <chrono>
 
+/**
+ * Struct collection context on which algorithm is executed.
+ *
+ * Create date:
+ *    16/11/27
+ * Last modification date:
+ *    16/11/27
+ *
+ * @authors Anna Musiał, Wojciech Gumuła
+ */
 struct AcquisitionContext {
   std::chrono::microseconds timestamp;
   unsigned long pixelSum;

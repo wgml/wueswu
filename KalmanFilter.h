@@ -6,6 +6,22 @@
 
 namespace kalman_filter {
 template<size_t N>
+
+/**
+ * Implements Kalman filter to estimate input signal state.
+ * @see report for details
+ *
+ * Create date:
+ *    16/12/18
+ * Last modification date:
+ *    16/12/25
+ *
+ * @authors Anna Musiał, Wojciech Gumuła
+ *
+ * @tparam N input signal length
+ * @param measurements input data container
+ * @param prediction output data contaier
+ */
 void predict(const std::array<double, N> &measurements, std::array<double, N> &prediction) {
   // subscribing is Mat_t[row][col]
   using Mat_t = std::array<std::array<double, 3>, 3>;
