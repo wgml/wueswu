@@ -5,6 +5,16 @@
 #include <vector>
 #include "HeartRateEstimator.h"
 
+/**
+ * Uses persisted data to mock camera provider.
+ * Estimator should provide exact result for original and mocked data.
+ * Create date:
+ *    16/11/27
+ * Last modification date:
+ *    16/12/25
+ *
+ * @authors Anna Musiał, Wojciech Gumuła
+ */
 class MockContextProvider : public ContextProvider {
 public:
 

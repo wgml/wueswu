@@ -15,6 +15,16 @@
 using GenApi_3_0_Basler_pylon_v5_0::CEnumerationPtr;
 using GenApi_3_0_Basler_pylon_v5_0::IsAvailable;
 
+/**
+ * Offers context acquired from basler camera.
+ * Requires camera access on application startup.
+ * Create date:
+ *    16/11/27
+ * Last modification date:
+ *    16/12/25
+ *
+ * @authors Anna Musiał, Wojciech Gumuła
+ */
 class CameraContextProvider : public ContextProvider {
 
 public:

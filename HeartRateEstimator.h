@@ -12,6 +12,16 @@
 
 class HeartRateEstimator;
 
+/**
+ * Abstract provided class. Implementations should override run method.
+ * Create date:
+ *    16/11/27
+ * Last modification date:
+ *    16/12/25
+ *
+ * @authors Anna Musiał, Wojciech Gumuła
+ */
+
 class ContextProvider {
 public:
 
@@ -49,6 +59,15 @@ protected:
   HeartRateEstimator *estimator = nullptr;
 };
 
+/**
+ * Estimator class, described in a detailed way in the report.
+ * Create date:
+ *    16/11/27
+ * Last modification date:
+ *    16/12/25
+ *
+ * @authors Anna Musiał, Wojciech Gumuła
+ */
 class HeartRateEstimator {
 public:
   /**

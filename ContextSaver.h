@@ -4,6 +4,16 @@
 #include <chrono>
 #include <fstream>
 
+/**
+ * Class provided to offer persisting context into files for future use.
+ * Result can be used to mock camera provider.
+ * Create date:
+ *    16/11/27
+ * Last modification date:
+ *    16/12/25
+ *
+ * @authors Anna Musiał, Wojciech Gumuła
+ */
 class ContextSaver {
 public:
   ContextSaver()
