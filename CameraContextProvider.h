@@ -39,10 +39,7 @@ public:
    *
    * @authors Anna Musiał, Wojciech Gumuła
    *
-   * @param imagesToGrab number of images should be acquired. Execution is stopped when desired number is reached.
-   * @param width width of roi, centered
-   * @param height height of roi, centered
-   * @param exposureTime exposure time for camera
+   * @param config configuration structure.
    */
   CameraContextProvider(const Config &config)
       : configuration(config){}

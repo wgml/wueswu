@@ -29,8 +29,7 @@ public:
    *
    * @authors Anna Musiał, Wojciech Gumuła
    *
-   * @param filename File containing context entries
-   * @param runInfinitely flag determining if data from file should be looped
+   * @param configuration Configuration structure.
    */
   MockContextProvider(const Config &configuration)
       : runInfinitely(configuration.camera.mock_infinitely) {

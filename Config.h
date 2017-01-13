@@ -11,6 +11,15 @@ using TCLAP::SwitchArg;
 using TCLAP::ArgException;
 using TCLAP::CmdLine;
 
+/**
+ * Struct containing all configuration parameters for application.
+ * Create date:
+ *    17/01/13
+ * Last modification date:
+ *    17/01/13
+ *
+ * @authors Anna Musiał, Wojciech Gumuła
+ */
 struct Config {
   struct {
     bool mock = false;

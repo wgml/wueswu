@@ -84,8 +84,7 @@ public:
    * @authors Anna Musiał, Wojciech Gumuła
    *
    * @param provider data provider for algorithm.
-   * @param min_freq Optional min frequency for estimate.
-   * @param max_freq Optional max frequency for estimate.
+   * @param config Configuration structure.
    */
   HeartRateEstimator(std::shared_ptr<ContextProvider> provider, const Config &config)
       : provider(provider)
@@ -117,8 +116,6 @@ public:
    *    16/12/25
    *
    * @authors Anna Musiał, Wojciech Gumuła
-   *
-   * @param tps Optional tps defining algorithm execution frequency
    */
   void run();
 
@@ -160,9 +157,6 @@ public:
 
 private:
 
-  /**
-   * Window size parameter. It should be moved into template argument in future.
-   */
   using data_t = std::vector<double>;
 
   double estimate();
