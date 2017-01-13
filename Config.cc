@@ -1,4 +1,26 @@
 #include "Config.h"
+#include <cassert>
+
+namespace {
+void verify(const Config &config) {
+  assert(config.camera.width > 0);
+  assert(config.camera.height > 0);
+  assert(config.camera.exposure_time >0);
+  assert(config.camera.fps > 0);
+  assert(config.camera.fps > 1.0 / config.camera.exposure_time);
+  assert(config.camera.gain >= 0);
+  assert(config.camera.images_to_grab >= 0);
+
+  assert(config.estimator.fps > 0);
+  assert(config.estimator.min_freq >= 0);
+  assert(config.estimator.max_freq >= 0);
+  assert(config.estimator.max_freq > config.estimator.min_freq);
+  assert(config.estimator.window_length > 0);
+  assert(config.estimator.filtered_average_coeff > 0
+         && config.estimator.filtered_average_coeff < 0.5);
+  assert(config.estimator.average_window > 0);
+}
+}
 
 const Config parse_config(int argc, char *argv[]) {
   try {
@@ -19,6 +41,8 @@ const Config parse_config(int argc, char *argv[]) {
                                          config.camera.exposure_time, "milliseconds");
     ValueArg<double> camera_fps("f", "camera-fps", "Camera fps.", false, config.camera.fps,
                                 "frames per second");
+    ValueArg<double> gain("g", "gain", "Camera gain.", false, config.camera.gain,
+                                "dB");
     ValueArg<unsigned int> images_to_grab("i", "images-to-grab",
                                           "Limit number of images to grab from camera.", false,
                                           config.camera.images_to_grab, "value");
@@ -37,9 +61,9 @@ const Config parse_config(int argc, char *argv[]) {
     ValueArg<double> filtered_average_coeff("c", "filtered-average-coeff",
                                             "Coefficient for truncated average.", false,
                                             config.estimator.filtered_average_coeff, "ratio");
-    ValueArg<double> average_window("d", "average-window",
-                                    "Number of samples to compute average from.", false,
-                                    config.estimator.average_window, "value");
+    ValueArg<unsigned int> average_window("d", "average-window",
+                                          "Number of samples to compute average from.", false,
+                                          config.estimator.average_window, "value");
 
     cmd.add(mock_filename);
     cmd.add(no_mock_infinitely);
@@ -47,6 +71,7 @@ const Config parse_config(int argc, char *argv[]) {
     cmd.add(video_height);
     cmd.add(exposure_time);
     cmd.add(camera_fps);
+    cmd.add(gain);
     cmd.add(images_to_grab);
     cmd.add(estimator_fps);
     cmd.add(min_freq);
@@ -76,6 +101,9 @@ const Config parse_config(int argc, char *argv[]) {
     if (camera_fps.isSet())
       config.camera.fps = camera_fps.getValue();
 
+    if (gain.isSet())
+      config.camera.gain = gain.getValue();
+
     if (images_to_grab.isSet())
       config.camera.images_to_grab = images_to_grab.getValue();
 
@@ -88,6 +116,9 @@ const Config parse_config(int argc, char *argv[]) {
     if (max_freq.isSet())
       config.estimator.max_freq = max_freq.getValue();
 
+    if (window_length.isSet())
+      config.estimator.window_length = window_length.getValue();
+
     if (arithm_average.isSet())
       config.estimator.filtered_average = false;
 
@@ -97,6 +128,7 @@ const Config parse_config(int argc, char *argv[]) {
     if (average_window.isSet())
       config.estimator.average_window = average_window.getValue();
 
+    verify(config);
     return config;
   } catch (ArgException &e) {
     std::cout << "Configuration error " << e.error() << " for argument " << e.argId() << std::endl;

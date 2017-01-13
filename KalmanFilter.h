@@ -5,8 +5,6 @@
 #include <array>
 
 namespace kalman_filter {
-template<size_t N>
-
 /**
  * Implements Kalman filter to estimate input signal state.
  * @see report for details
@@ -18,11 +16,10 @@ template<size_t N>
  *
  * @authors Anna Musiał, Wojciech Gumuła
  *
- * @tparam N input signal length
  * @param measurements input data container
  * @param prediction output data contaier
  */
-void predict(const std::array<double, N> &measurements, std::array<double, N> &prediction) {
+void predict(const std::vector<double> &measurements, std::vector<double> &prediction) {
   // subscribing is Mat_t[row][col]
   using Mat_t = std::array<std::array<double, 3>, 3>;
   using Col_t = std::array<double, 3>;
@@ -32,7 +29,7 @@ void predict(const std::array<double, N> &measurements, std::array<double, N> &p
   Col_t X_predict = {0, 0, 0};
   Col_t X_predict_prev;
 
-  for (auto i = 0; i < N; i++) {
+  for (auto i = 0; i < measurements.size(); i++) {
     auto signal = measurements[i];
 
     if (i > 0) {

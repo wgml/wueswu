@@ -2,11 +2,12 @@
 #define WUESWU_FIRFILETR_H
 
 #include <cassert>
+#include <algorithm>
 #include <array>
+#include <vector>
 
 #define _USE_MATH_DEFINES
 #include <math.h>
-#include <algorithm>
 
 /**
  * Class implementing windowed FIR filter.
@@ -89,17 +90,16 @@ struct FirFilter {
    *
    * @authors Anna Musiał, Wojciech Gumuła
    *
-   * @tparam K signal length
    * @param raw_data input data container
    * @param filtered_data container for output data
    */
-  template<size_t K>
-  void filter(const std::array<double, K> &raw_data, std::array<double, K> &filtered_data) {
+  void filter(const std::vector<double> &raw_data, std::vector<double> &filtered_data) {
+    size_t K = raw_data.size();
     assert(K >= N);
     int P = M - 1;
     ssize_t L = K + P;
 
-    std::array<double, K + M - 1> signal_prim{};
+    std::vector<double> signal_prim(static_cast<size_t>(K + M - 1));
     for (auto i = 0; i < P; ++i)
       signal_prim[i] = raw_data[0];
 

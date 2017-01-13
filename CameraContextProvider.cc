@@ -1,5 +1,6 @@
 
 #include "CameraContextProvider.h"
+#include "Config.h"
 
 void CameraContextProvider::run() {
   try {
@@ -48,6 +49,7 @@ void CameraContextProvider::init(Pylon::CBaslerUsbInstantCamera &camera) {
   camera.ExposureTime = configuration.camera.exposure_time;
   camera.AcquisitionFrameRateEnable = true;
   camera.AcquisitionFrameRate = configuration.camera.fps;
+  camera.Gain = configuration.camera.gain;
   camera.MaxNumBuffer = 100;
   setPixelFormat(camera);
 }

@@ -21,8 +21,8 @@ struct Config {
     unsigned int height = 600;
     unsigned int exposure_time = 10000;
     double fps = 60;
+    double gain = 0;
     unsigned int images_to_grab = 1000000;
-    // todo gain?
   } camera;
 
   struct {
@@ -45,6 +45,7 @@ struct Config {
       o << " height=" << cfg.camera.height << std::endl;
       o << " exposure_time=" << cfg.camera.exposure_time << std::endl;
       o << " fps=" << cfg.camera.fps << std::endl;
+      o << " gain=" << cfg.camera.gain << std::endl;
       o << " images_to_grab=" << cfg.camera.images_to_grab << std::endl;
     }
     o << "estimator" << std::endl;
@@ -59,6 +60,10 @@ struct Config {
     return o;
   }
 };
+
+namespace {
+void verifY(const Config &);
+}
 
 const Config parse_config(int argc, char *argv[]);
 

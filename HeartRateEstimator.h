@@ -2,6 +2,7 @@
 #ifndef WUESWU_HEARTRATEESTIMATOR_H
 #define WUESWU_HEARTRATEESTIMATOR_H
 
+#include <vector>
 #include <deque>
 #include <mutex>
 #include <memory>
@@ -152,7 +153,7 @@ public:
    */
   void notify(AcquisitionContext context) {
     std::lock_guard<std::mutex> lock(data_mutex);
-    while (data.size() >= WINDOW_SIZE)
+    while (data.size() >= window_size())
       data.pop_front();
     data.push_back(context);
   }
@@ -162,9 +163,7 @@ private:
   /**
    * Window size parameter. It should be moved into template argument in future.
    */
-  static const size_t WINDOW_SIZE = 1980;
-
-  using data_t = std::array<double, WINDOW_SIZE>;
+  using data_t = std::vector<double>;
 
   double estimate();
 
@@ -183,6 +182,10 @@ private:
   bool is_valid(double estimate) {
     return estimate >= configuration.estimator.min_freq * 60
            && estimate <= configuration.estimator.max_freq * 60;
+  }
+
+  size_t window_size() {
+    return static_cast<size_t>(configuration.estimator.window_length * configuration.camera.fps);
   }
 
   volatile bool work = false;
