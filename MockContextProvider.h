@@ -4,6 +4,7 @@
 
 #include <vector>
 #include "HeartRateEstimator.h"
+#include "Config.h"
 
 /**
  * Uses persisted data to mock camera provider.
@@ -31,9 +32,9 @@ public:
    * @param filename File containing context entries
    * @param runInfinitely flag determining if data from file should be looped
    */
-  MockContextProvider(std::string filename, bool runInfinitely)
-      : runInfinitely(runInfinitely) {
-    loadFromFile(filename);
+  MockContextProvider(const Config &configuration)
+      : runInfinitely(configuration.camera.mock_infinitely) {
+    loadFromFile(configuration.camera.mock_filename);
   }
 
   void run() override;

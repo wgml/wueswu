@@ -5,20 +5,21 @@
 #include "MockContextProvider.h"
 #include "CameraContextProvider.h"
 
-// i suggest passing argument to main, e.g. data/ania_biale_6_exp=30000.txt
 int main(int argc, char *argv[]) {
-  bool mock = argc > 1;
+
+  auto config = parse_config(argc, argv);
+  std::cerr << "Received configuration" << std::endl << config << std::endl;
   std::shared_ptr<ContextProvider> provider;
-  if (mock) {
+  if (config.camera.mock) {
     provider = std::make_shared<MockContextProvider>(
-        std::string(argv[1]), true);
+        config);
   } else {
-    provider = std::make_shared<CameraContextProvider>(100000, 1000, 800, 15000);
+    provider = std::make_shared<CameraContextProvider>(config);
   }
-  HeartRateEstimator estimator{provider};
+  HeartRateEstimator estimator{provider, config};
   estimator.init();
   std::thread providerThread([&provider] { provider->run(); });
-  std::thread estimatorThread([&estimator] { estimator.run(/*tps=*/10); });
+  std::thread estimatorThread([&estimator] { estimator.run(); });
 
   providerThread.join();
   estimatorThread.join();

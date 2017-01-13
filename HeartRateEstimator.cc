@@ -8,6 +8,7 @@
 #include "kissfft/tools/kiss_fftr.h"
 #include "KalmanFilter.h"
 #include "HeartRateEstimator.h"
+#include "Config.h"
 
 using std::chrono::high_resolution_clock;
 using std::chrono::duration_cast;
@@ -17,7 +18,7 @@ void HeartRateEstimator::init() {
   provider->subscribe(this);
 }
 
-void HeartRateEstimator::run(double tps) {
+void HeartRateEstimator::run() {
   work = true;
   while (work) {
     auto start_time = high_resolution_clock::now();
@@ -37,7 +38,8 @@ void HeartRateEstimator::run(double tps) {
     } else {
       std::cout << "Estimated value is considered invalid." << std::endl;
     }
-    auto sleep_time = std::max<long long>(0L, static_cast<long>(1e6 / tps) - execution_time);
+    auto sleep_time = std::max<long long>(0L, static_cast<long>(1e6 / configuration.estimator.fps) -
+                                              execution_time);
     std::this_thread::sleep_for(microseconds{sleep_time});
   }
 }
@@ -106,8 +108,9 @@ void HeartRateEstimator::kalman_data(const data_t &normalized_data, data_t &kalm
 void HeartRateEstimator::filter_data(const data_t &raw_data, data_t &filtered_data,
                                      double sampling_rate) {
   data_t tmp_data;
-  FirFilter<10>{true, sampling_rate, max_freq}.filter(raw_data, tmp_data);
-  FirFilter<10>{false, sampling_rate, min_freq}.filter(tmp_data, filtered_data);
+  FirFilter<10>{true, sampling_rate, configuration.estimator.max_freq}.filter(raw_data, tmp_data);
+  FirFilter<10>{false, sampling_rate, configuration.estimator.min_freq}.filter(tmp_data,
+                                                                               filtered_data);
 }
 
 void
@@ -130,8 +133,7 @@ HeartRateEstimator::fft_data(const data_t &raw_data, data_t &fft_data_abs, data_
 
   const size_t L = WINDOW_SIZE;
   for (size_t i = 0; i < WINDOW_SIZE; i++) {
-    fft_data_abs[i] = 2 * std::sqrt(std::pow(fft[i].r, 2) + std::pow(fft[i].i, 2)) /
-                      L; // window_size vs nfft, what with imaginary?
+    fft_data_abs[i] = 2 * std::sqrt(std::pow(fft[i].r, 2) + std::pow(fft[i].i, 2)) / L;
     fft_data_freq[i] = (avg_freq * i) / L;
   }
   free(cfg);
@@ -140,20 +142,18 @@ HeartRateEstimator::fft_data(const data_t &raw_data, data_t &fft_data_abs, data_
 }
 
 double HeartRateEstimator::determine_result(const data_t &fft_abs, const data_t &fft_freq) {
-  const double freq_lo = min_freq, freq_hi = max_freq;
-
   size_t idx;
   double max_freq = -1;
   double max_freq_val = -1;;
 
   for (idx = 0; idx < WINDOW_SIZE; idx++) {
-    if (fft_freq[idx] >= freq_lo) {
+    if (fft_freq[idx] >= configuration.estimator.min_freq) {
       max_freq_val = fft_abs[idx];
       max_freq = fft_freq[idx];
       break;
     }
   }
-  for (idx++; idx < WINDOW_SIZE && fft_freq[idx] <= freq_hi; idx++) {
+  for (idx++; idx < WINDOW_SIZE && fft_freq[idx] <= configuration.estimator.max_freq; idx++) {
     if (max_freq_val < fft_abs[idx]) {
       max_freq = fft_freq[idx];
       max_freq_val = fft_abs[idx];

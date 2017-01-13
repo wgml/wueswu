@@ -4,7 +4,7 @@ set(PYLON_ROOT ~/Programming/C/libs/pylon5)
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
 set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -std=c++11 -O3")
 
-include_directories(${PYLON_ROOT}/include kissfft)
+include_directories(${PYLON_ROOT}/include kissfft include)
 add_subdirectory(kissfft)
 link_directories(${PYLON_ROOT}/lib64)
 
@@ -60,7 +60,9 @@ set(WORK_SOURCE_FILES
         ContextSaver.h
         FirFilter.h
         KalmanFilter.h
-        ResultAverage.h)
+        ResultAverage.h
+        Config.cc
+        Config.h)
 
 
 add_executable(project ${WORK_SOURCE_FILES})

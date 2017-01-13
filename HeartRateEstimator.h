@@ -9,6 +9,7 @@
 #include "FirFilter.h"
 #include "AcquisitionContext.h"
 #include "ResultAverage.h"
+#include "Config.h"
 
 class HeartRateEstimator;
 
@@ -85,9 +86,10 @@ public:
    * @param min_freq Optional min frequency for estimate.
    * @param max_freq Optional max frequency for estimate.
    */
-  HeartRateEstimator(std::shared_ptr<ContextProvider> provider, double min_freq = 0.66,
-                     double max_freq = 2.66)
-      : provider(provider), min_freq(min_freq), max_freq(max_freq) {}
+  HeartRateEstimator(std::shared_ptr<ContextProvider> provider, const Config &config)
+      : provider(provider)
+      , configuration(config)
+  {}
 
   /**
    * Method performing algorithm initialization.
@@ -114,9 +116,9 @@ public:
    *
    * @authors Anna Musiał, Wojciech Gumuła
    *
-   * @param tps Optional tps defining algoritm execution frequency
+   * @param tps Optional tps defining algorithm execution frequency
    */
-  void run(double tps = 1.0);
+  void run();
 
   /**
    * Method used to abort execution and peaceful shutdown procedure.
@@ -178,7 +180,8 @@ private:
   double determine_result(const data_t &, const data_t &);
 
   bool is_valid(double estimate) {
-    return estimate >= min_freq * 60 && estimate <= max_freq * 60;
+    return estimate >= configuration.estimator.min_freq * 60
+           && estimate <= configuration.estimator.max_freq * 60;
   }
 
   volatile bool work = false;
@@ -189,10 +192,7 @@ private:
   ResultAverage<double, 30> average;
 
   std::shared_ptr<ContextProvider> provider;
-
-  double min_freq;
-  double max_freq;
-
+  const Config configuration;
 };
 
 #endif //WUESWU_HEARTRATEESTIMATOR_H

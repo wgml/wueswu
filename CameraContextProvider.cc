@@ -5,13 +5,14 @@ void CameraContextProvider::run() {
   try {
     Pylon::PylonInitialize();
     Pylon::CBaslerUsbInstantCamera camera(Pylon::CTlFactory::GetInstance().CreateFirstDevice());
-    init(camera, width, height, exposureTime);
+    init(camera);
 
-    camera.StartGrabbing(imagesToGrab);
+    camera.StartGrabbing(configuration.camera.images_to_grab);
 
     Pylon::CGrabResultPtr ptrGrabResult;
 
-    for (unsigned int idx = 0; idx < imagesToGrab && camera.IsGrabbing(); idx++) {
+    for (unsigned int idx = 0;
+         idx < configuration.camera.images_to_grab && camera.IsGrabbing(); idx++) {
       camera.RetrieveResult(10000, ptrGrabResult, Pylon::TimeoutHandling_Return);
 
       if (ptrGrabResult->GrabSucceeded()) {
@@ -29,22 +30,24 @@ void CameraContextProvider::run() {
 
 }
 
-void CameraContextProvider::init(Pylon::CBaslerUsbInstantCamera &camera, int width, int height,
-                                 int exposureTime) {
+void CameraContextProvider::init(Pylon::CBaslerUsbInstantCamera &camera) {
   camera.Open();
 
   int maxWidth = 2040;
   int maxHeight = 1086;
-  int offsetX = (((maxWidth - width) / 2) / 2) * 2;
-  int offsetY = (((maxHeight - height) / 2) / 2) * 2;
-  std::cerr << width << "x" << height << "+" << offsetX << "+" << offsetY << " e=" << exposureTime
-            << std::endl;
+  int offsetX = (((maxWidth - configuration.camera.width) / 2) / 2) * 2;
+  int offsetY = (((maxHeight - configuration.camera.height) / 2) / 2) * 2;
+  std::cerr << configuration.camera.width << "x" << configuration.camera.height << "+" << offsetX
+            << "+" << offsetY << " e=" << configuration.camera.exposure_time << "f="
+            << configuration.camera.fps << std::endl;
 
-  camera.Width = width;
-  camera.Height = height;
+  camera.Width = configuration.camera.width;
+  camera.Height = configuration.camera.height;
   camera.OffsetX = offsetX;
   camera.OffsetY = offsetY;
-  camera.ExposureTime = exposureTime;
+  camera.ExposureTime = configuration.camera.exposure_time;
+  camera.AcquisitionFrameRateEnable = true;
+  camera.AcquisitionFrameRate = configuration.camera.fps;
   camera.MaxNumBuffer = 100;
   setPixelFormat(camera);
 }

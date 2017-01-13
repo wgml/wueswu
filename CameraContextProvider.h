@@ -44,20 +44,16 @@ public:
    * @param height height of roi, centered
    * @param exposureTime exposure time for camera
    */
-  CameraContextProvider(size_t imagesToGrab,
-                        int width, int height, int exposureTime)
-      : imagesToGrab(imagesToGrab), width(width), height(height), exposureTime(exposureTime) {}
+  CameraContextProvider(const Config &config)
+      : configuration(config){}
 
   void run() override;
 
 private:
   ContextSaver contextSaver;
-  size_t imagesToGrab;
-  int width;
-  int height;
-  int exposureTime;
+  const Config configuration;
 
-  void init(Pylon::CBaslerUsbInstantCamera &, int width, int height, int exposureTime);
+  void init(Pylon::CBaslerUsbInstantCamera &);
 
   void setPixelFormat(Pylon::CBaslerUsbInstantCamera &);
 
