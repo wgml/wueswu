@@ -1,6 +1,5 @@
 
 #include "CameraContextProvider.h"
-#include "Config.h"
 
 void CameraContextProvider::run() {
   try {
