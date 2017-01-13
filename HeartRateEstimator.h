@@ -88,6 +88,7 @@ public:
    */
   HeartRateEstimator(std::shared_ptr<ContextProvider> provider, const Config &config)
       : provider(provider)
+      , average(config)
       , configuration(config)
   {}
 
@@ -189,7 +190,7 @@ private:
   std::deque<AcquisitionContext> data;
   std::mutex data_mutex;
 
-  ResultAverage<double, 30> average;
+  ResultAverage<double> average;
 
   std::shared_ptr<ContextProvider> provider;
   const Config configuration;

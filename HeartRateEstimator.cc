@@ -8,7 +8,6 @@
 #include "kissfft/tools/kiss_fftr.h"
 #include "KalmanFilter.h"
 #include "HeartRateEstimator.h"
-#include "Config.h"
 
 using std::chrono::high_resolution_clock;
 using std::chrono::duration_cast;
@@ -26,7 +25,7 @@ void HeartRateEstimator::run() {
     auto end_time = high_resolution_clock::now();
     auto execution_time = duration_cast<microseconds>(end_time - start_time).count();
     std::cout << std::chrono::duration_cast<std::chrono::microseconds>(
-        std::chrono::system_clock::now().time_since_epoch()).count() << " determined heart rate is "
+        std::chrono::system_clock::now().time_since_epoch()).count() << ": determined heart rate is "
               << hr_estimate
               << ". There are " << data.size() << " samples in context. It took me "
               << execution_time << "us to execute." << std::endl;
@@ -34,7 +33,7 @@ void HeartRateEstimator::run() {
     if (is_valid(hr_estimate)) {
       auto hr_averaged = average.average(hr_estimate);
       std::cout << "Average out of " << hr_averaged.num
-                << " samples is " << hr_averaged.value << std::endl;
+                << " valid samples is " << hr_averaged.value << std::endl;
     } else {
       std::cout << "Estimated value is considered invalid." << std::endl;
     }
@@ -147,17 +146,20 @@ double HeartRateEstimator::determine_result(const data_t &fft_abs, const data_t 
   double max_freq_val = -1;;
 
   for (idx = 0; idx < WINDOW_SIZE; idx++) {
-    if (fft_freq[idx] >= configuration.estimator.min_freq) {
+    if (fft_freq[idx] >= configuration.estimator.min_freq * 1.1) {
       max_freq_val = fft_abs[idx];
       max_freq = fft_freq[idx];
       break;
     }
   }
+
+  bool valid = false;
   for (idx++; idx < WINDOW_SIZE && fft_freq[idx] <= configuration.estimator.max_freq; idx++) {
-    if (max_freq_val < fft_abs[idx]) {
+    if (max_freq_val < fft_abs[idx] && fft_freq[idx] > configuration.estimator.min_freq) {
       max_freq = fft_freq[idx];
       max_freq_val = fft_abs[idx];
+      valid = true;
     }
   }
-  return max_freq;
+  return valid ? max_freq : -1;
 }

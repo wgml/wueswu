@@ -32,10 +32,10 @@ const Config parse_config(int argc, char *argv[]) {
     ValueArg<double> window_length("w", "window-length", "Estimate window length.", false,
                                    config.estimator.window_length, "seconds");
     SwitchArg arithm_average("a", "use-arithm-average",
-                             "Use arithmetic instead of filtered average. Second one will remove samples with values too distant from arithmetic average of set.",
+                             "Use arithmetic instead of truncated average. Second one will remove samples from each end of sorted values set.",
                              !config.estimator.filtered_average);
     ValueArg<double> filtered_average_coeff("c", "filtered-average-coeff",
-                                            "Coefficient for filtered average.", false,
+                                            "Coefficient for truncated average.", false,
                                             config.estimator.filtered_average_coeff, "ratio");
     ValueArg<double> average_window("d", "average-window",
                                     "Number of samples to compute average from.", false,
