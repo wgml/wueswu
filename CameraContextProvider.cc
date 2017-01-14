@@ -70,7 +70,7 @@ void CameraContextProvider::setPixelFormat(Pylon::CBaslerUsbInstantCamera &camer
 
 void CameraContextProvider::grabSucceeded(Pylon::CGrabResultPtr resultPtr, unsigned int idx) {
 #ifdef PYLON_WIN_BUILD
-  Pylon::DisplayImage(1, ptrGrabResult);
+  Pylon::DisplayImage(1, resultPtr);
 #endif
 
   auto width = resultPtr->GetWidth();

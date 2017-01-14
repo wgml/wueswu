@@ -8,6 +8,9 @@
     <Filter Include="Source Files\kiss_fft">
       <UniqueIdentifier>{d1068afb-3286-4853-819d-dd86e13c618c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\tclap">
+      <UniqueIdentifier>{a4561c60-e3cc-4f87-9e20-2921b16e5077}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MockContextProvider.cc">
@@ -27,6 +30,9 @@
     </ClCompile>
     <ClCompile Include="kissfft\kiss_fft.c">
       <Filter>Source Files\kiss_fft</Filter>
+    </ClCompile>
+    <ClCompile Include="Config.cc">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -68,6 +74,81 @@
     </ClInclude>
     <ClInclude Include="kissfft\kissfft.hh">
       <Filter>Source Files\kiss_fft</Filter>
+    </ClInclude>
+    <ClInclude Include="include\tclap\Arg.h">
+      <Filter>Source Files\tclap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\tclap\ArgException.h">
+      <Filter>Source Files\tclap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\tclap\ArgTraits.h">
+      <Filter>Source Files\tclap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\tclap\CmdLine.h">
+      <Filter>Source Files\tclap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\tclap\CmdLineInterface.h">
+      <Filter>Source Files\tclap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\tclap\CmdLineOutput.h">
+      <Filter>Source Files\tclap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\tclap\Constraint.h">
+      <Filter>Source Files\tclap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\tclap\DocBookOutput.h">
+      <Filter>Source Files\tclap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\tclap\HelpVisitor.h">
+      <Filter>Source Files\tclap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\tclap\IgnoreRestVisitor.h">
+      <Filter>Source Files\tclap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\tclap\MultiArg.h">
+      <Filter>Source Files\tclap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\tclap\MultiSwitchArg.h">
+      <Filter>Source Files\tclap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\tclap\OptionalUnlabeledTracker.h">
+      <Filter>Source Files\tclap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\tclap\StandardTraits.h">
+      <Filter>Source Files\tclap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\tclap\StdOutput.h">
+      <Filter>Source Files\tclap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\tclap\SwitchArg.h">
+      <Filter>Source Files\tclap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\tclap\UnlabeledMultiArg.h">
+      <Filter>Source Files\tclap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\tclap\UnlabeledValueArg.h">
+      <Filter>Source Files\tclap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\tclap\ValueArg.h">
+      <Filter>Source Files\tclap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\tclap\ValuesConstraint.h">
+      <Filter>Source Files\tclap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\tclap\VersionVisitor.h">
+      <Filter>Source Files\tclap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\tclap\Visitor.h">
+      <Filter>Source Files\tclap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\tclap\XorHandler.h">
+      <Filter>Source Files\tclap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\tclap\ZshCompletionOutput.h">
+      <Filter>Source Files\tclap</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

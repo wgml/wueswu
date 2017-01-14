@@ -96,8 +96,8 @@ struct FirFilter {
   void filter(const std::vector<double> &raw_data, std::vector<double> &filtered_data) {
     size_t K = raw_data.size();
     assert(K >= N);
-    int P = M - 1;
-    ssize_t L = K + P;
+    unsigned int P = M - 1;
+    size_t L = K + P;
 
     std::vector<double> signal_prim(static_cast<size_t>(K + M - 1));
     for (auto i = 0; i < P; ++i)

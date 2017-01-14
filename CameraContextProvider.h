@@ -4,7 +4,6 @@
 #include <pylon/PylonIncludes.h>
 
 #ifdef PYLON_WIN_BUILD
-#warning "PYLON_WIN_BUILD is defined. I'll compile with acquisition result presented. It might limit algorithm capabilities."
 #include <pylon/PylonGUI.h>
 #endif
 

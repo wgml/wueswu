@@ -2,7 +2,7 @@
 #ifndef WUESWU_CONFIG_H
 #define WUESWU_CONFIG_H
 
-#include <iostream>
+#include <ostream>
 #include <string>
 #include <tclap/CmdLine.h>
 
