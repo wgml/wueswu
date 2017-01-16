@@ -64,7 +64,7 @@ void CameraContextProvider::setPixelFormat(Pylon::CBaslerUsbInstantCamera &camer
     }
   }
   catch (...) {
-    std::cerr << "sumting went wong" << std::endl;
+    std::cerr << "Unexpected exception caught" << std::endl;
   }
 }
 
@@ -82,10 +82,11 @@ void CameraContextProvider::grabSucceeded(Pylon::CGrabResultPtr resultPtr, unsig
 
   unsigned long sum = 0;
   unsigned long cnt = 0;
-  for (size_t row = 0; row < width; row++) {
-    for (size_t col = (row + 1) % 2; col < height; col += 2) {
+  size_t offset_x = resultPtr->GetOffsetX();
+  for (size_t row = 0; row < height; row++) {
+    for (size_t col = (row + 1) % 2; col < width; col += 2) {
       cnt++;
-      sum += pImageBuffer[row * height + col];
+      sum += pImageBuffer[row * (width + offset_x) + col];
     }
   }
 

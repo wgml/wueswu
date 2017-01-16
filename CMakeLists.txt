@@ -23,10 +23,7 @@ target_link_libraries(grab
         XmlParser_gcc_v3_0_Basler_pylon_v5_0
         NodeMapData_gcc_v3_0_Basler_pylon_v5_0
         log4cpp_gcc_v3_0_Basler_pylon_v5_0
-        bxapi
         gxapi
-        pylonc
-        pylon_TL_bcon
         pylon_TL_camemu
         pylon_TL_gige
         pylon_TL_gtc
@@ -75,10 +72,7 @@ target_link_libraries(project
         XmlParser_gcc_v3_0_Basler_pylon_v5_0
         NodeMapData_gcc_v3_0_Basler_pylon_v5_0
         log4cpp_gcc_v3_0_Basler_pylon_v5_0
-        bxapi
         gxapi
-        pylonc
-        pylon_TL_bcon
         pylon_TL_camemu
         pylon_TL_gige
         pylon_TL_gtc
