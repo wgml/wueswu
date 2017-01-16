@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 3.0)
 project(wueswu)
-set(PYLON_ROOT ~/Programming/C/libs/pylon5)
+
+set(PYLON_ROOT "${PYLON5_PATH}")
+if (NOT PYLON_ROOT)
+    set(PYLON_ROOT /opt/pylon5)
+endif()
+
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
 set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -std=c++11 -O3")
 
