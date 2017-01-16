@@ -130,7 +130,7 @@ public:
    * @authors Anna Musiał, Wojciech Gumuła
    */
   void stop() {
-    std::cerr << "Estimator received shutdown signal." << std::endl;
+    std::cout << "Estimator received shutdown signal." << std::endl;
     work = false;
   }
 

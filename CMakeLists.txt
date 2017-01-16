@@ -8,35 +8,6 @@ include_directories(${PYLON_ROOT}/include kissfft include)
 add_subdirectory(kissfft)
 link_directories(${PYLON_ROOT}/lib64)
 
-set(GRAB_SOURCE_FILES
-    ConfigDump.h
-    ContextSaver.h
-    Grab.cpp)
-
-add_executable(grab ${GRAB_SOURCE_FILES})
-target_link_libraries(grab
-        pylonbase
-        GenApi_gcc_v3_0_Basler_pylon_v5_0
-        GCBase_gcc_v3_0_Basler_pylon_v5_0
-        Log_gcc_v3_0_Basler_pylon_v5_0
-        MathParser_gcc_v3_0_Basler_pylon_v5_0
-        XmlParser_gcc_v3_0_Basler_pylon_v5_0
-        NodeMapData_gcc_v3_0_Basler_pylon_v5_0
-        log4cpp_gcc_v3_0_Basler_pylon_v5_0
-        gxapi
-        pylon_TL_camemu
-        pylon_TL_gige
-        pylon_TL_gtc
-        pylon_TL_usb
-        pylonutility
-        uxapi
-        pthread
-        dl
-        m
-        gcc_s
-        rt)
-
-
 if(COMPILE_GUI)
     if(WIN32)
         add_definitions(-DPYLON_WIN_BUILD)

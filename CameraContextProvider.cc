@@ -16,7 +16,7 @@ void CameraContextProvider::run() {
       camera.RetrieveResult(10000, ptrGrabResult, Pylon::TimeoutHandling_Return);
 
       if (ptrGrabResult->GrabSucceeded()) {
-        grabSucceeded(ptrGrabResult, idx);
+        grabSucceeded(ptrGrabResult);
       } else {
         grabFailed(ptrGrabResult, idx);
       }
@@ -58,25 +58,22 @@ void CameraContextProvider::setPixelFormat(Pylon::CBaslerUsbInstantCamera &camer
     CEnumerationPtr pixelFormat(camera.GetNodeMap().GetNode("PixelFormat"));
     if (IsAvailable(pixelFormat->GetEntryByName("BayerBG8"))) {
       pixelFormat->FromString("BayerBG8");
-      std::cerr << "set pixel format to BayerBG8" << std::endl;
     } else {
       std::cerr << "BayerBG8 not available" << std::endl;
     }
   }
   catch (...) {
-    std::cerr << "Unexpected exception caught" << std::endl;
+    std::cout << "Unexpected exception caught!" << std::endl;
   }
 }
 
-void CameraContextProvider::grabSucceeded(Pylon::CGrabResultPtr resultPtr, unsigned int idx) {
+void CameraContextProvider::grabSucceeded(Pylon::CGrabResultPtr resultPtr) {
 #ifdef PYLON_WIN_BUILD
   Pylon::DisplayImage(1, resultPtr);
 #endif
 
   auto width = resultPtr->GetWidth();
   auto height = resultPtr->GetHeight();
-
-  std::cerr << "#" << idx << " " << width << "x" << height << std::endl;
 
   const uint8_t *pImageBuffer = static_cast<uint8_t *>(resultPtr->GetBuffer());
 
@@ -90,9 +87,6 @@ void CameraContextProvider::grabSucceeded(Pylon::CGrabResultPtr resultPtr, unsig
     }
   }
 
-  std::cerr << "#" << idx << " " << "sum: " << sum << " cnt: " << cnt << " result: " << sum / cnt
-            << std::endl;
-
   auto now = std::chrono::duration_cast<std::chrono::microseconds>(
       std::chrono::system_clock::now().time_since_epoch());
   AcquisitionContext ctx{now, sum, cnt};
@@ -101,7 +95,7 @@ void CameraContextProvider::grabSucceeded(Pylon::CGrabResultPtr resultPtr, unsig
 }
 
 void CameraContextProvider::grabFailed(Pylon::CGrabResultPtr resultPtr, unsigned int idx) {
-  std::cerr << "#" << idx << " " << "Error: " << resultPtr->GetErrorCode() << " "
+  std::cout << "#" << idx << " " << "Error: " << resultPtr->GetErrorCode() << " "
             << resultPtr->GetErrorDescription() << std::endl;
 
 }

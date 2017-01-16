@@ -24,7 +24,7 @@ void HeartRateEstimator::run() {
     auto hr_estimate = estimate();
     auto end_time = high_resolution_clock::now();
     auto execution_time = duration_cast<microseconds>(end_time - start_time).count();
-    std::cout << std::chrono::duration_cast<std::chrono::microseconds>(
+    std::cerr << std::chrono::duration_cast<std::chrono::microseconds>(
         std::chrono::system_clock::now().time_since_epoch()).count()
               << ": determined heart rate is " << hr_estimate
               << ". There are " << data.size() << " samples in context. It took me "

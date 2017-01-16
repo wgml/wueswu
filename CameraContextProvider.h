@@ -53,7 +53,7 @@ private:
 
   void setPixelFormat(Pylon::CBaslerUsbInstantCamera &);
 
-  void grabSucceeded(Pylon::CGrabResultPtr resultPtr, unsigned int idx);
+  void grabSucceeded(Pylon::CGrabResultPtr resultPtr);
 
   void grabFailed(Pylon::CGrabResultPtr resultPtr, unsigned int idx);
 };
